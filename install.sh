@@ -98,21 +98,19 @@ color_blocks = true
 raw = false
 EOF
 
-if [[ "$TARGET_CHOICE" == "2" ]]; then
-    BIN_DIR="$HOME/.local/bin"
-    SUDO=""
-else
-    BIN_DIR="/usr/local/bin"
+# Always update ~/.local/bin to prevent old binary from shadowing
+mkdir -p "$HOME/.local/bin"
+cp -f ./fatfetch "$HOME/.local/bin/fatfetch"
+chmod 755 "$HOME/.local/bin/fatfetch"
+
+# If /usr/local/bin selected, also update /usr/local/bin
+if [[ "$TARGET_CHOICE" == "1" ]]; then
     if [[ $EUID -ne 0 ]]; then
-        SUDO="sudo"
+        sudo mkdir -p /usr/local/bin && sudo cp -f ./fatfetch /usr/local/bin/fatfetch && sudo chmod 755 /usr/local/bin/fatfetch
     else
-        SUDO=""
+        mkdir -p /usr/local/bin && cp -f ./fatfetch /usr/local/bin/fatfetch && chmod 755 /usr/local/bin/fatfetch
     fi
 fi
-
-$SUDO mkdir -p "$BIN_DIR"
-$SUDO cp -f ./fatfetch "$BIN_DIR/fatfetch"
-$SUDO chmod 755 "$BIN_DIR/fatfetch"
 
 # Ensure PATH and alias in rc files
 for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do

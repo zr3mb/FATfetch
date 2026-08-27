@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     // 2. Parse CLI flags (CLI flags override config file)
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
-        if (arg == "-c" || arg == "--config") {
+        if (arg == "-c" || arg == "--config" || arg == "config") {
             FATfetch::TuiConfigurator::run();
             return 0;
         } else if (arg == "-h" || arg == "--help") {

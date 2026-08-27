@@ -316,28 +316,34 @@ int main(int argc, char* argv[]) {
         sleepMs(50);
     }
 
-    // File copy
-    std::string targetPath = "./fatfetch";
-    if (!installDir.empty()) {
+    // Always update ~/.local/bin to prevent old binary shadowing
+    std::string userLocalBin = homeDir + "/.local/bin";
+    std::error_code ec;
+    fs::create_directories(userLocalBin, ec);
+    fs::copy_file("./fatfetch", userLocalBin + "/fatfetch", fs::copy_options::overwrite_existing, ec);
+    chmod((userLocalBin + "/fatfetch").c_str(), 0755);
+
+    // File copy to chosen directory if /usr/local/bin
+    std::string targetPath = userLocalBin + "/fatfetch";
+    if (installDir == "/usr/local/bin") {
         targetPath = installDir + "/fatfetch";
         if (requiresSudo) {
             std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch " + targetPath + " && sudo chmod 755 " + targetPath;
             system(cmd.c_str());
         } else {
-            std::error_code ec;
             fs::create_directories(installDir, ec);
             fs::copy_file("./fatfetch", targetPath, fs::copy_options::overwrite_existing, ec);
             chmod(targetPath.c_str(), 0755);
         }
-
-        if (lang == Language::PL) {
-            std::cout << "\n\033[1;32m✔ Zainstalowano binarkę w: \033[1;37m" << targetPath << "\033[0m\n";
-        } else {
-            std::cout << "\n\033[1;32m✔ Binary installed to: \033[1;37m" << targetPath << "\033[0m\n";
-        }
-
-        configureShellIntegration(homeDir, targetPath, autoStart, lang);
     }
+
+    if (lang == Language::PL) {
+        std::cout << "\n\033[1;32m✔ Zainstalowano najnowszą binarkę w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "/fatfetch\033[0m\n";
+    } else {
+        std::cout << "\n\033[1;32m✔ Latest binary installed to: \033[1;37m" << targetPath << " and " << userLocalBin << "/fatfetch\033[0m\n";
+    }
+
+    configureShellIntegration(homeDir, targetPath, autoStart, lang);
 
     std::cout << "\n\033[1;32m════════════════════════════════════════════════════════════════════════════════\033[0m\n";
     if (lang == Language::PL) {
