@@ -49,9 +49,25 @@ cd FATfetch
 
 ## 🕹️ Konfigurator TUI & Komendy
 
+### 🚀 Nowy Widżet: `fatjump` (Skaczący Grubas w Slow-Mo):
+Odpala w pętli ultra-płynną animację w zwolnionym tempie ze skaczącym grubasem, fizyką falującego bebecha, latającymi puszkami Monstera, chrupkami i sejsmografem Richtera:
+```bash
+fatjump
+# lub z poziomu fatfetcha:
+fatfetch --jump
+```
+**Sterowanie w `fatjump`:**
+- `[Spacja]` – Zmiana prędkości: Matrix Ultra Slow-Mo (240ms) / Klasyczny Slow-Mo (130ms) / Turbo Jiggle (60ms)
+- `[p]` – Przełączanie palet kolorystycznych w locie (Femboy, Trans, Pride, Dracula, Catppuccin, Cyan)
+- `[q]` / `[Esc]` – Wyjście
+
+---
+
 ### Uruchomienie graficznego konfiguratora TUI:
 ```bash
 fatfetch --config
+# lub
+fatfetch -c
 ```
 
 ### Przykłady wywołania z flagami:

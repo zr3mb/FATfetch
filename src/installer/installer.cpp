@@ -586,30 +586,38 @@ int main(int argc, char* argv[]) {
     // 🏃💨 RUN 7-SECOND ULTRA DETAILED BELLY JIGGLE MARATHON ANIMATION!
     run7SecondInstallationAnimation(lang);
 
-    // File copy to destinations
+    // Always update ~/.local/bin to prevent old binary shadowing
     std::string userLocalBin = homeDir + "/.local/bin";
     std::error_code ec;
     fs::create_directories(userLocalBin, ec);
     fs::copy_file("./fatfetch", userLocalBin + "/fatfetch", fs::copy_options::overwrite_existing, ec);
     chmod((userLocalBin + "/fatfetch").c_str(), 0755);
+    if (fs::exists("./fatjump")) {
+        fs::copy_file("./fatjump", userLocalBin + "/fatjump", fs::copy_options::overwrite_existing, ec);
+        chmod((userLocalBin + "/fatjump").c_str(), 0755);
+    }
 
     std::string targetPath = userLocalBin + "/fatfetch";
     if (installDir == "/usr/local/bin") {
         targetPath = installDir + "/fatfetch";
         if (requiresSudo) {
-            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch " + targetPath + " && sudo chmod 755 " + targetPath;
+            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch ./fatjump " + installDir + "/ && sudo chmod 755 " + installDir + "/fatfetch " + installDir + "/fatjump 2>/dev/null || true";
             system(cmd.c_str());
         } else {
             fs::create_directories(installDir, ec);
             fs::copy_file("./fatfetch", targetPath, fs::copy_options::overwrite_existing, ec);
             chmod(targetPath.c_str(), 0755);
+            if (fs::exists("./fatjump")) {
+                fs::copy_file("./fatjump", installDir + "/fatjump", fs::copy_options::overwrite_existing, ec);
+                chmod((installDir + "/fatjump").c_str(), 0755);
+            }
         }
     }
 
     if (lang == Language::PL) {
-        std::cout << "\n\033[1;32m✔ Zainstalowano najnowszą binarkę w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "/fatfetch\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Zainstalowano najnowsze binarki (fatfetch, fatjump) w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "\033[0m\n";
     } else {
-        std::cout << "\n\033[1;32m✔ Latest binary installed to: \033[1;37m" << targetPath << " and " << userLocalBin << "/fatfetch\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Installed latest binaries (fatfetch, fatjump) to: \033[1;37m" << targetPath << " and " << userLocalBin << "\033[0m\n";
     }
 
     configureShellIntegration(homeDir, targetPath, autoStart, lang);

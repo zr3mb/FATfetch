@@ -261,21 +261,22 @@ done
 printf "\033[?25h"
 
 # ------------------------------------------------------------------------------
-#  COPY BINARY & FINISH
+#  COPY BINARIES & FINISH
 # ------------------------------------------------------------------------------
 mkdir -p "$HOME/.local/bin"
 cp -f ./fatfetch "$HOME/.local/bin/fatfetch" 2>/dev/null || true
-chmod 755 "$HOME/.local/bin/fatfetch" 2>/dev/null || true
+cp -f ./fatjump "$HOME/.local/bin/fatjump" 2>/dev/null || true
+chmod 755 "$HOME/.local/bin/fatfetch" "$HOME/.local/bin/fatjump" 2>/dev/null || true
 
 if [[ "$TARGET_CHOICE" == "1" ]]; then
     if [[ $EUID -ne 0 ]]; then
         sudo mkdir -p /usr/local/bin 2>/dev/null || true
-        sudo cp -f ./fatfetch /usr/local/bin/fatfetch 2>/dev/null || true
-        sudo chmod 755 /usr/local/bin/fatfetch 2>/dev/null || true
+        sudo cp -f ./fatfetch ./fatjump /usr/local/bin/ 2>/dev/null || true
+        sudo chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump 2>/dev/null || true
     else
         mkdir -p /usr/local/bin
-        cp -f ./fatfetch /usr/local/bin/fatfetch
-        chmod 755 /usr/local/bin/fatfetch
+        cp -f ./fatfetch ./fatjump /usr/local/bin/
+        chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump
     fi
 fi
 
@@ -288,17 +289,23 @@ for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
         if ! grep -q "alias fatfetch=" "$rc"; then
             echo -e 'alias fatfetch="$HOME/.local/bin/fatfetch"' >> "$rc"
         fi
+        if ! grep -q "alias fatjump=" "$rc"; then
+            echo -e 'alias fatjump="$HOME/.local/bin/fatjump"' >> "$rc"
+        fi
     fi
 done
 
 echo -e "\n\033[1;32m"
 echo "╔════════════════════════════════════════════════════════════════════════════════╗"
 echo "║                   🏁  INSTALLATION COMPLETE!  🏁                               ║"
-echo "║              INSTALACJA FATfetch ZAKOŃCZONA SUKCESEM!                          ║"
+echo "║       INSTALACJA FATfetch ORAZ WIDŻETU FATJUMP ZAKOŃCZONA SUKCESEM!           ║"
 echo "╚════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\033[0m"
 
-echo -e "\033[1;33m💡 WSKAZÓWKA:\033[0m Aby otworzyć konfigurator w dowolnym momencie, wpisz: \033[1;36mfatfetch --config\033[0m"
-echo -e "Wpisz: \033[1;36msource ~/.bashrc\033[0m (lub otwórz nowy terminal)!\n"
+echo -e "\033[1;33m💡 WSKAZÓWKI:\033[0m"
+echo -e "   • Główny fetch: \033[1;36mfatfetch\033[0m"
+echo -e "   • Skaczący grubas w slow-mo: \033[1;35mfatjump\033[0m  (lub \033[1;35mfatfetch --jump\033[0m)"
+echo -e "   • Konfigurator TUI: \033[1;36mfatfetch --config\033[0m"
+echo -e "   • Wpisz: \033[1;36msource ~/.bashrc\033[0m (lub otwórz nowy terminal)!\n"
 
 "$HOME/.local/bin/fatfetch"

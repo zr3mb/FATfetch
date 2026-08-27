@@ -5,6 +5,7 @@
 #include "palettes.hpp"
 #include "config.hpp"
 #include "tui_config.hpp"
+#include "fatjump.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,6 +28,9 @@ int main(int argc, char* argv[]) {
         std::string arg = argv[i];
         if (arg == "-c" || arg == "--config" || arg == "config") {
             FATfetch::TuiConfigurator::run();
+            return 0;
+        } else if (arg == "--jump" || arg == "jump") {
+            FATfetch::FatJump::run(config.paletteName, config.logoName);
             return 0;
         } else if (arg == "-h" || arg == "--help") {
             FATfetch::DisplayManager::printHelp(config.lang);
