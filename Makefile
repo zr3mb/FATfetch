@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++20 -O2 -Wall -Wextra -static-libstdc++ -static-libgcc -Isrc
-PREFIX ?= /usr/local
+PREFIX ?= $(if $(filter root,$(USER)),/usr/local,$(HOME)/.local)
 DIST_ZIP = FATfetch-standalone.zip
 
 SRC = src/main.cpp src/sysinfo.cpp src/jokes.cpp src/ascii_art.cpp src/display.cpp src/locales.cpp src/palettes.cpp src/config.cpp src/tui_config.cpp
