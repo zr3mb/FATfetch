@@ -4,7 +4,7 @@ PREFIX ?= /usr/local
 DIST_ZIP = FATfetch-standalone.zip
 
 SRC = src/main.cpp src/sysinfo.cpp src/jokes.cpp src/ascii_art.cpp src/display.cpp src/locales.cpp src/palettes.cpp src/config.cpp src/tui_config.cpp
-INSTALLER_SRC = src/installer/installer.cpp src/locales.cpp
+INSTALLER_SRC = src/installer/installer.cpp src/locales.cpp src/config.cpp src/tui_config.cpp src/palettes.cpp src/ascii_art.cpp src/display.cpp src/sysinfo.cpp src/jokes.cpp
 
 all: fatfetch fatfetch-installer
 

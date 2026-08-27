@@ -1,4 +1,6 @@
 #include "../locales.hpp"
+#include "../config.hpp"
+#include "../tui_config.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -13,6 +15,9 @@
 namespace fs = std::filesystem;
 using FATfetch::Language;
 using FATfetch::LocaleManager;
+using FATfetch::AppConfig;
+using FATfetch::ConfigManager;
+using FATfetch::TuiConfigurator;
 
 void clearScreen() {
     std::cout << "\033[2J\033[H" << std::flush;
@@ -72,7 +77,6 @@ void printBanner(Language lang) {
 }
 
 void configureShellIntegration(const std::string& homeDir, const std::string& installedPath, bool autoStart, Language lang) {
-    std::string binDir = homeDir + "/.local/bin";
     std::vector<std::string> rcFiles = {
         homeDir + "/.bashrc",
         homeDir + "/.zshrc",
@@ -121,6 +125,9 @@ int main(int argc, char* argv[]) {
         } else if (arg == "-h" || arg == "--help") {
             std::cout << "Usage: ./fatfetch-installer [--lang=pl|en]\n";
             return 0;
+        } else if (arg == "-c" || arg == "--config") {
+            TuiConfigurator::run();
+            return 0;
         } else if ((arg == "-L" || arg == "--lang") && i + 1 < argc) {
             lang = LocaleManager::parseLanguage(argv[++i]);
             langPreselected = true;
@@ -161,32 +168,79 @@ int main(int argc, char* argv[]) {
         std::cout << " • Używasz Arch Linuxa (lub chociaż mówisz wszystkim, że używasz)\n";
         std::cout << " • Nie brałeś prysznica od co najmniej 48 godzin\n";
         std::cout << " • Twój Neovim ma więcej niż 50 wtyczek\n";
-        std::cout << " • Rozmiar koszulki: 4XL+\n\n";
-        std::cout << "\033[1;32mNaciśnij [ENTER], aby rozpocząć proces instalacji...\033[0m";
+        std::cout << " • Rozmiar koszulki: 4XL+ lub zakolanówki\n\n";
+        std::cout << "\033[1;32mNaciśnij [ENTER], aby przejść do konfiguracji...\033[0m";
     } else {
         std::cout << "\n\033[1;33m[ WELCOME TO THE FATfetch INSTALLER ]\033[0m\n";
         std::cout << "Verify your qualifications before proceeding:\n";
         std::cout << " • You use Arch Linux (or tell everyone you do)\n";
         std::cout << " • Zero showers taken in the last 48 hours\n";
         std::cout << " • Neovim has over 50 custom Lua plugins\n";
-        std::cout << " • T-Shirt size: 4XL+\n\n";
-        std::cout << "\033[1;32mPress [ENTER] to begin the installation wizard...\033[0m";
+        std::cout << " • T-Shirt size 4XL+ or striped programming socks\n\n";
+        std::cout << "\033[1;32mPress [ENTER] to proceed to configuration...\033[0m";
     }
 
     std::string dummy;
     std::getline(std::cin, dummy);
 
-    // Step 1: Install Path selection
+    // KROK: Wybór Tożsamości / Identity Selection
+    clearScreen();
+    printBanner(lang);
+    AppConfig initialConfig;
+    initialConfig.lang = lang;
+
+    if (lang == Language::PL) {
+        std::cout << "\033[1;33m[ KROK 1/4: KIM CHCESZ BYĆ W FATfetch? ]\033[0m\n\n";
+        std::cout << " 1) \033[1;36m🦣 Arch Chad Grubas\033[0m       (Klasyczny potężny gość w koszulce Arch Linux)\n";
+        std::cout << " 2) \033[1;35m🌸 300kg Gruby Femboy\033[0m     (Gruby Femboy w zakolanówkach + Pastelowa paleta Femboy)\n";
+        std::cout << " 3) \033[1;34m🏳️‍⚧️ Trans Pride Femboy\033[0m    (Femboy + pastelowa flaga Trans)\n";
+        std::cout << " 4) \033[1;33m🦤 Discord Mod z piwnicy\033[0m  (Basement Dweller z brzuchem na wierzchu)\n";
+        std::cout << " 5) \033[1;32m⚙️ Pełny Konfigurator TUI\033[0m (Otwórz graficzny edytor TUI z podglądem na żywo)\n\n";
+        std::cout << "Wybierz swoją tożsamość [1-5] (domyślnie 1): ";
+    } else {
+        std::cout << "\033[1;33m[ STEP 1/4: WHO DO YOU WANT TO BE IN FATfetch? ]\033[0m\n\n";
+        std::cout << " 1) \033[1;36m🦣 Arch Chad Big Guy\033[0m      (Classic absolute unit in Arch Linux T-shirt)\n";
+        std::cout << " 2) \033[1;35m🌸 300kg Chonky Femboy\033[0m    (Thicc Femboy in programming socks + Femboy Palette)\n";
+        std::cout << " 3) \033[1;34m🏳️‍⚧️ Trans Pride Femboy\033[0m    (Chonky Femboy + Trans Pride Palette)\n";
+        std::cout << " 4) \033[1;33m🦤 Discord Basement Mod\033[0m   (Classic neckbeard moderator)\n";
+        std::cout << " 5) \033[1;32m⚙️ Full TUI Configurator\033[0m  (Open interactive live preview configurator)\n\n";
+        std::cout << "Select your identity [1-5] (default 1): ";
+    }
+
+    std::string personaChoice;
+    std::getline(std::cin, personaChoice);
+
+    if (personaChoice == "2") {
+        initialConfig.logo = "fatfemboy";
+        initialConfig.palette = "femboy";
+    } else if (personaChoice == "3") {
+        initialConfig.logo = "fatfemboy";
+        initialConfig.palette = "trans";
+    } else if (personaChoice == "4") {
+        initialConfig.logo = "discordmod";
+        initialConfig.palette = "default";
+    } else if (personaChoice == "5") {
+        TuiConfigurator::run();
+        initialConfig = ConfigManager::loadConfig();
+    } else {
+        initialConfig.logo = "archguy";
+        initialConfig.palette = "default";
+    }
+
+    // Save configured identity
+    ConfigManager::saveConfig(initialConfig);
+
+    // Step 2: Install Path selection
     clearScreen();
     printBanner(lang);
     if (lang == Language::PL) {
-        std::cout << "\033[1;33m[ KROK 1/3: WYBÓR LOKALIZACJI INSTALACJI ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ KROK 2/4: WYBÓR LOKALIZACJI INSTALACJI ]\033[0m\n\n";
         std::cout << " 1) \033[1;36m/usr/local/bin/fatfetch\033[0m (Dla całego systemu - ZALECANE, natychmiast w PATH)\n";
         std::cout << " 2) \033[1;36m~/.local/bin/fatfetch\033[0m   (Dla użytkownika - bez uprawnień roota)\n";
         std::cout << " 3) \033[1;36mKompilacja lokalna\033[0m      (Pozostaw tylko plik binarny w bieżącym katalogu)\n\n";
         std::cout << "Wybierz opcję [1-3] (domyślnie 1): ";
     } else {
-        std::cout << "\033[1;33m[ STEP 1/3: INSTALLATION TARGET ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ STEP 2/4: INSTALLATION TARGET ]\033[0m\n\n";
         std::cout << " 1) \033[1;36m/usr/local/bin/fatfetch\033[0m (System-wide - RECOMMENDED, globally in PATH)\n";
         std::cout << " 2) \033[1;36m~/.local/bin/fatfetch\033[0m   (User-only - NO root privileges required)\n";
         std::cout << " 3) \033[1;36mLocal build only\033[0m       (Keep compiled binary in current folder)\n\n";
@@ -210,18 +264,18 @@ int main(int argc, char* argv[]) {
         installDir = "";
     }
 
-    // Step 2: Shell integration question
+    // Step 3: Shell integration question
     clearScreen();
     printBanner(lang);
     if (lang == Language::PL) {
-        std::cout << "\033[1;33m[ KROK 2/3: INTEGRACJA Z POWŁOKĄ ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ KROK 3/4: INTEGRACJA Z POWŁOKĄ ]\033[0m\n\n";
         std::cout << "Czy chcesz automatycznie dodać 'fatfetch' do pliku startowego Twojej powłoki\n"
                   << "(~/.bashrc lub ~/.zshrc), aby FATfetch witał Cię przy każdym otwarciu terminala?\n\n";
         std::cout << "Dodać do autostartu? [T/n]: ";
     } else {
-        std::cout << "\033[1;33m[ STEP 2/3: SHELL STARTUP INTEGRATION ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ STEP 3/4: SHELL STARTUP INTEGRATION ]\033[0m\n\n";
         std::cout << "Would you like to append 'fatfetch' to your shell startup file\n"
-                  << "(~/.bashrc or ~/.zshrc) to remind you of your Arch Chad status every time you open a terminal?\n\n";
+                  << "(~/.bashrc or ~/.zshrc) to remind you of your status every time you open a terminal?\n\n";
         std::cout << "Add to shell rc? [Y/n]: ";
     }
 
@@ -229,13 +283,13 @@ int main(int argc, char* argv[]) {
     std::getline(std::cin, addShell);
     bool autoStart = (addShell.empty() || addShell == "t" || addShell == "T" || addShell == "y" || addShell == "Y" || addShell == "tak" || addShell == "yes");
 
-    // Step 3: Compilation / Verification and live progress
+    // Step 4: Compilation / Verification and live progress
     clearScreen();
     printBanner(lang);
     if (lang == Language::PL) {
-        std::cout << "\033[1;33m[ KROK 3/3: INSTALACJA I INICJALIZACJA ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ KROK 4/4: INSTALACJA I INICJALIZACJA ]\033[0m\n\n";
     } else {
-        std::cout << "\033[1;33m[ STEP 3/3: INSTALLATION & INITIALIZATION ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ STEP 4/4: INSTALLATION & INITIALIZATION ]\033[0m\n\n";
     }
 
     struct Step {
@@ -259,7 +313,7 @@ int main(int argc, char* argv[]) {
     for (const auto& step : steps) {
         std::string msg = (lang == Language::PL) ? step.msgPL : step.msgEN;
         std::cout << "\r\033[K\033[1;36m[" << step.percent << "%]\033[0m \033[1;37m" << msg << "\033[0m\n";
-        sleepMs(60);
+        sleepMs(50);
     }
 
     // File copy
@@ -288,12 +342,14 @@ int main(int argc, char* argv[]) {
     std::cout << "\n\033[1;32m════════════════════════════════════════════════════════════════════════════════\033[0m\n";
     if (lang == Language::PL) {
         std::cout << "\033[1;35m      GRATULACJE! FATfetch ZOSTAŁ POMYŚLNIE ZAINSTALOWANY!                      \033[0m\n\n";
-        std::cout << "\033[1;33m💡 WSKAZÓWKA:\033[0m Aby użyć komendy w BIEŻĄCYM oknie terminala, wpisz:\n";
-        std::cout << "   \033[1;36msource ~/.bashrc\033[0m (lub \033[1;36msource ~/.zshrc\033[0m), albo po prostu otwórz nowe okno terminala!\n";
+        std::cout << "\033[1;33m💡 WSKAZÓWKA:\033[0m Aby zmienić konfigurację w dowolnym momencie, wpisz:\n";
+        std::cout << "   \033[1;36mfatfetch --config\033[0m\n";
+        std::cout << "   W bieżącym oknie terminala wpisz: \033[1;36msource ~/.bashrc\033[0m (lub otwórz nowe okno terminala)!\n";
     } else {
         std::cout << "\033[1;35m      CONGRATULATIONS! FATfetch HAS BEEN SUCCESSFULLY INSTALLED!                \033[0m\n\n";
-        std::cout << "\033[1;33m💡 TIP:\033[0m To use the command in the CURRENT terminal window, run:\n";
-        std::cout << "   \033[1;36msource ~/.bashrc\033[0m (or \033[1;36msource ~/.zshrc\033[0m), or simply open a new terminal window!\n";
+        std::cout << "\033[1;33m💡 TIP:\033[0m To change settings anytime, simply run:\n";
+        std::cout << "   \033[1;36mfatfetch --config\033[0m\n";
+        std::cout << "   In current terminal run: \033[1;36msource ~/.bashrc\033[0m (or open a new terminal)!\n";
     }
     std::cout << "\033[1;32m════════════════════════════════════════════════════════════════════════════════\033[0m\n\n";
 
@@ -305,7 +361,7 @@ int main(int argc, char* argv[]) {
     std::getline(std::cin, dummy);
 
     clearScreen();
-    std::string testCmd = targetPath + " --lang=" + LocaleManager::languageToString(lang);
+    std::string testCmd = targetPath;
     system(testCmd.c_str());
 
     return 0;
