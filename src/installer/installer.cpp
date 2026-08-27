@@ -98,14 +98,14 @@ void printArchGuyWelcome() {
 }
 
 // -----------------------------------------------------------------------------
-//  🏃💨 ULTRA-DETAILED RUNNING & BELLY JIGGLE ANIMATION SYSTEM
+//  🏃💨 ULTRA-DETAILED 6-FRAME BELLY JIGGLE PHYSICS ANIMATION SYSTEM
 // -----------------------------------------------------------------------------
 
 struct RunningFrame {
     std::vector<std::string> lines;
 };
 
-std::vector<RunningFrame> getRunningFrames() {
+std::vector<RunningFrame> getDetailedRunningFrames() {
     std::string C_RST = "\033[0m";
     std::string C_CYN = "\033[1;36m";
     std::string C_SKN = "\033[38;5;216m";
@@ -113,78 +113,111 @@ std::vector<RunningFrame> getRunningFrames() {
     std::string C_DGR = "\033[38;5;238m";
     std::string C_BLU = "\033[1;34m";
     std::string C_YEL = "\033[1;33m";
-    std::string C_SWT = "\033[1;36m"; // sweat drops
+    std::string C_RED = "\033[1;31m";
+    std::string C_SWT = "\033[1;36m";
 
-    std::vector<RunningFrame> frames(4);
+    std::vector<RunningFrame> frames(6);
 
-    // Frame 0: Right leg leap forward, belly bounces UP, sweat flying
+    // Frame 0: Right foot launches, massive belly rockets UPWARDS, sweat flies!
     frames[0].lines = {
-        C_DGR + "       .---.       " + C_SWT + "💦 " + C_YEL + "*PUFF!*" + C_RST,
-        C_SKN + "     / 'o.o'\\     " + C_SWT + "💧" + C_RST,
+        C_DGR + "       .---.       " + C_SWT + "💦 💦 " + C_YEL + "*SAPAĆ!*" + C_RST,
+        C_SKN + "     / 'o.o'\\     " + C_SWT + "💧 💧" + C_RST,
         C_SKN + "     |  " + C_DGR + "###" + C_SKN + " |   " + C_DGR + "/" + C_RST,
         C_BLK + "   .--' === '--' " + C_DGR + "/" + C_RST,
         C_BLK + "  /              \\  " + C_CYN + "   /\\" + C_RST,
-        C_BLK + " /   " + C_SKN + "(  ^   ^  )" + C_BLK + "  \\ " + C_CYN + "  /  \\" + C_RST,
-        C_BLK + "|    " + C_SKN + "( BEBECH  )" + C_BLK + "   |" + C_CYN + " / /\\ \\" + C_RST,
-        C_BLK + " \\   " + C_SKN + "(  JIGGLE )" + C_BLK + "  / " + C_CYN + "/ /__\\ \\" + C_RST,
-        C_BLK + "  \\   " + C_SKN + "'-------'" + C_BLK + "  /  " + C_CYN + "archlinux" + C_RST,
-        C_SKN + "   '---.______.-'  " + C_RST,
-        C_BLK + "      /      \\     " + C_RST,
-        C_BLU + "    _/        \\_   " + C_RST
+        C_BLK + " /  " + C_SKN + "( ^^ BEBECH ^^ )" + C_BLK + "\\ " + C_CYN + "  /  \\" + C_RST,
+        C_BLK + "|   " + C_SKN + "(  ^ JIGGLE ^  )" + C_BLK + " |" + C_CYN + " / /\\ \\" + C_RST,
+        C_BLK + " \\  " + C_SKN + "(   300KG UP   )" + C_BLK + "/ " + C_CYN + "/ /__\\ \\" + C_RST,
+        C_BLK + "  \\  " + C_SKN + "'------------'" + C_BLK + " /  " + C_CYN + "archlinux" + C_RST,
+        C_SKN + "   '---.________.-'  " + C_RST,
+        C_BLK + "      /        \\     " + C_RST,
+        C_BLU + "    _/          \\_   " + C_YEL + "*SZUR!*" + C_RST
     };
 
-    // Frame 1: Ground stomp, belly jiggles DOWN heavily
+    // Frame 1: Gravity hits! Massive downward compression, shockwave jiggle!
     frames[1].lines = {
-        C_DGR + "       .---.       " + C_SWT + "💦 " + C_YEL + "*HUUH!*" + C_RST,
+        C_DGR + "       .---.       " + C_SWT + "💦 " + C_RED + "*DUDU!*" + C_RST,
         C_SKN + "     / -.-  \\     " + C_SWT + "💧" + C_RST,
         C_SKN + "     |  " + C_DGR + "###" + C_SKN + " |  " + C_DGR + "_" + C_RST,
         C_BLK + "   .--' === '--' " + C_DGR + "\\" + C_RST,
         C_BLK + "  /               \\ " + C_CYN + "  /\\" + C_RST,
-        C_BLK + " /     " + C_SKN + "(  v  v  )" + C_BLK + "  \\" + C_CYN + " /  \\" + C_RST,
-        C_BLK + "|      " + C_SKN + "( BEBECH )" + C_BLK + "   |" + C_CYN + "/ /\\ \\" + C_RST,
-        C_BLK + " \\     " + C_SKN + "(  BOUNCE)" + C_BLK + "  // /__\\ \\" + C_RST,
-        C_BLK + "  \\     " + C_SKN + "'------'" + C_BLK + "  // " + C_CYN + "archlinux" + C_RST,
-        C_SKN + "   '---.______.-'  " + C_RST,
-        C_BLK + "     / /     \\ \\   " + C_RST,
-        C_BLU + "   _/_/       \\_   " + C_YEL + "*TUP!*" + C_RST
+        C_BLK + " /  " + C_SKN + "( ~~ FALA ~~ )" + C_BLK + "  \\" + C_CYN + " /  \\" + C_RST,
+        C_BLK + "|   " + C_SKN + "( vv JIGGLE vv )" + C_BLK + " |" + C_CYN + "/ /\\ \\" + C_RST,
+        C_BLK + " \\  " + C_SKN + "(  OPADANIE   )" + C_BLK + " // /__\\ \\" + C_RST,
+        C_BLK + "  \\  " + C_SKN + "'------------'" + C_BLK + "// " + C_CYN + "archlinux" + C_RST,
+        C_SKN + "   '---.________.-'  " + C_RST,
+        C_BLK + "     / /        \\ \\  " + C_RST,
+        C_BLU + "   _/_/          \\_  " + C_YEL + "*TUP!*" + C_RST
     };
 
-    // Frame 2: Left leg leap forward, belly bounces UP to the left, sweat sprays
+    // Frame 2: Elastic bounce! Belly ripples sideways, sweat spray!
     frames[2].lines = {
-        C_DGR + "       .---.       " + C_SWT + "💦 " + C_YEL + "*SAPAĆ!*" + C_RST,
+        C_DGR + "       .---.       " + C_SWT + "💦 💦 " + C_YEL + "*HUUH!*" + C_RST,
         C_SKN + "     / >.<  \\     " + C_SWT + "💧" + C_RST,
         C_SKN + "     |  " + C_DGR + "###" + C_SKN + " |   " + C_DGR + "\\" + C_RST,
         C_BLK + "   .--' === '--' " + C_DGR + "\\" + C_RST,
         C_BLK + "  /              \\  " + C_CYN + "   /\\" + C_RST,
-        C_BLK + " /   " + C_SKN + "(  ^   ^  )" + C_BLK + "  \\ " + C_CYN + "  /  \\" + C_RST,
-        C_BLK + "|    " + C_SKN + "( BEBECH  )" + C_BLK + "   |" + C_CYN + " / /\\ \\" + C_RST,
-        C_BLK + " \\   " + C_SKN + "(  WOBBLE )" + C_BLK + "  / " + C_CYN + "/ /__\\ \\" + C_RST,
-        C_BLK + "  \\   " + C_SKN + "'-------'" + C_BLK + "  /  " + C_CYN + "archlinux" + C_RST,
-        C_SKN + "   '---.______.-'  " + C_RST,
-        C_BLK + "      /      \\     " + C_RST,
-        C_BLU + "     _/        \\_  " + C_RST
+        C_BLK + " /  " + C_SKN + "( << FALOWANIE )" + C_BLK + "\\ " + C_CYN + "  /  \\" + C_RST,
+        C_BLK + "|   " + C_SKN + "(   MASY >>    )" + C_BLK + " |" + C_CYN + " / /\\ \\" + C_RST,
+        C_BLK + " \\  " + C_SKN + "(  SPRĘŻYNUJE  )" + C_BLK + "/ " + C_CYN + "/ /__\\ \\" + C_RST,
+        C_BLK + "  \\  " + C_SKN + "'------------'" + C_BLK + " /  " + C_CYN + "archlinux" + C_RST,
+        C_SKN + "   '---.________.-'  " + C_RST,
+        C_BLK + "      /        \\     " + C_RST,
+        C_BLU + "     _/          \\_  " + C_YEL + "*CHLAP!*" + C_RST
     };
 
-    // Frame 3: Heavy landing, seismic shockwave
+    // Frame 3: Left foot launches forward! Belly rockets UP in other direction!
     frames[3].lines = {
-        C_DGR + "       .---.       " + C_SWT + "💦 " + C_YEL + "*DUDU!*" + C_RST,
-        C_SKN + "     / O.o  \\     " + C_SWT + "💧" + C_RST,
+        C_DGR + "       .---.       " + C_SWT + "💦 💦 " + C_RED + "*PUFF!*" + C_RST,
+        C_SKN + "     / O.o  \\     " + C_SWT + "💧 💧" + C_RST,
         C_SKN + "     |  " + C_DGR + "###" + C_SKN + " |   " + C_DGR + "/" + C_RST,
         C_BLK + "   .--' === '--' " + C_DGR + "/" + C_RST,
         C_BLK + "  /              \\  " + C_CYN + "  /\\" + C_RST,
-        C_BLK + " /     " + C_SKN + "(  v  v  )" + C_BLK + " \\ " + C_CYN + " /  \\" + C_RST,
-        C_BLK + "|      " + C_SKN + "( BEBECH )" + C_BLK + "  |" + C_CYN + "/ /\\ \\" + C_RST,
-        C_BLK + " \\     " + C_SKN + "(  JIGGLE)" + C_BLK + " / / /__\\ \\" + C_RST,
-        C_BLK + "  \\     " + C_SKN + "'------'" + C_BLK + " /  " + C_CYN + "archlinux" + C_RST,
-        C_SKN + "   '---.______.-'  " + C_RST,
-        C_BLK + "     \\ \\     / /   " + C_RST,
-        C_BLU + "      \\_     \\_    " + C_YEL + "*BUM!*" + C_RST
+        C_BLK + " /  " + C_SKN + "( ^^ 300KG ^^ )" + C_BLK + " \\ " + C_CYN + " /  \\" + C_RST,
+        C_BLK + "|   " + C_SKN + "( ^ PODSKOK ^  )" + C_BLK + " |" + C_CYN + "/ /\\ \\" + C_RST,
+        C_BLK + " \\  " + C_SKN + "(  PĘPEK DRŻY  )" + C_BLK + "/ / /__\\ \\" + C_RST,
+        C_BLK + "  \\  " + C_SKN + "'------------'" + C_BLK + " /  " + C_CYN + "archlinux" + C_RST,
+        C_SKN + "   '---.________.-'  " + C_RST,
+        C_BLK + "     \\ \\        / /  " + C_RST,
+        C_BLU + "      \\_        \\_   " + C_YEL + "*ŁUP!*" + C_RST
+    };
+
+    // Frame 4: Second heavy landing! Ground crack, belly splats downwards!
+    frames[4].lines = {
+        C_DGR + "       .---.       " + C_SWT + "💦 " + C_RED + "*BUMMM!*" + C_RST,
+        C_SKN + "     / >o<  \\     " + C_SWT + "💧" + C_RST,
+        C_SKN + "     |  " + C_DGR + "###" + C_SKN + " |  " + C_DGR + "_" + C_RST,
+        C_BLK + "   .--' === '--' " + C_DGR + "\\" + C_RST,
+        C_BLK + "  /               \\ " + C_CYN + "  /\\" + C_RST,
+        C_BLK + " /  " + C_SKN + "( vv ROZLEW vv )" + C_BLK + " \\" + C_CYN + " /  \\" + C_RST,
+        C_BLK + "|   " + C_SKN + "(  NA BOKI     )" + C_BLK + " |" + C_CYN + "/ /\\ \\" + C_RST,
+        C_BLK + " \\  " + C_SKN + "(  WSTRZĄS 8.5 )" + C_BLK + "// /__\\ \\" + C_RST,
+        C_BLK + "  \\  " + C_SKN + "'------------'" + C_BLK + "// " + C_CYN + "archlinux" + C_RST,
+        C_SKN + "   '---.________.-'  " + C_RST,
+        C_BLK + "     / /        \\ \\  " + C_RST,
+        C_BLU + "   _/_/          \\_  " + C_YEL + "*TRZĘSIENIE!*" + C_RST
+    };
+
+    // Frame 5: Inertia recovery! Fat folds oscillate before next stride!
+    frames[5].lines = {
+        C_DGR + "       .---.       " + C_SWT + "💦 💦 " + C_YEL + "*DYCHA!*" + C_RST,
+        C_SKN + "     / 'o.o'\\     " + C_SWT + "💧" + C_RST,
+        C_SKN + "     |  " + C_DGR + "###" + C_SKN + " |   " + C_DGR + "\\" + C_RST,
+        C_BLK + "   .--' === '--' " + C_DGR + "\\" + C_RST,
+        C_BLK + "  /              \\  " + C_CYN + "   /\\" + C_RST,
+        C_BLK + " /  " + C_SKN + "( << BEZWŁADNOŚĆ)" + C_BLK + "\\ " + C_CYN + "  /  \\" + C_RST,
+        C_BLK + "|   " + C_SKN + "(   RESONANS   )" + C_BLK + " |" + C_CYN + " / /\\ \\" + C_RST,
+        C_BLK + " \\  " + C_SKN + "(  WOBBLE-MAX  )" + C_BLK + "/ " + C_CYN + "/ /__\\ \\" + C_RST,
+        C_BLK + "  \\  " + C_SKN + "'------------'" + C_BLK + " /  " + C_CYN + "archlinux" + C_RST,
+        C_SKN + "   '---.________.-'  " + C_RST,
+        C_BLK + "      /        \\     " + C_RST,
+        C_BLU + "     _/          \\_  " + C_YEL + "*PĘD!*" + C_RST
     };
 
     return frames;
 }
 
-void printExhaustedArchGuy(int pos) {
+void printExhaustedBreathing(int pos, int breathCycle) {
     std::string pad(pos, ' ');
     std::string C_RST = "\033[0m";
     std::string C_CYN = "\033[1;36m";
@@ -196,15 +229,18 @@ void printExhaustedArchGuy(int pos) {
     std::string C_RED = "\033[1;31m";
     std::string C_SWT = "\033[1;36m";
 
-    std::cout << pad << C_DGR + "           .---.           " + C_SWT + "💦 💦 " + C_YEL + "* HAA... HAA... *" + C_RST + "\n";
-    std::cout << pad << C_SKN + "          / x.x \\   " + C_SWT + "💦     " + C_RED + "* UFFF... ZDYCHAM... *" + C_RST + "\n";
-    std::cout << pad << C_SKN + "         |  ---  | /       " + C_YEL + "* JEZU CHRYSTE... *" + C_RST + "\n";
+    std::string gasping = (breathCycle % 2 == 0) ? C_RED + "* HAA... HAAA... UFFF... *" : C_YEL + "* ZDYCHAM... JEZU CHRYSTE... *";
+    std::string bellyState = (breathCycle % 2 == 0) ? C_SKN + "(  WISZĄCY BEBECH  )" : C_SKN + "(  FLAK DO SAMEJ ZIEMI )";
+
+    std::cout << pad << C_DGR + "           .---.           " + C_SWT + "💦 💦 " + gasping + C_RST + "\n";
+    std::cout << pad << C_SKN + "          / x.x \\   " + C_SWT + "💦 💧 " + C_SWT + "*POT CIURKIEM...*" + C_RST + "\n";
+    std::cout << pad << C_SKN + "         |  ---  | /       " + C_YEL + "* 0.00ms TRAWY... *" + C_RST + "\n";
     std::cout << pad << C_DGR + "         |  " + C_DGR + "###" + C_DGR + "  |/        " + C_SWT + "💧 💧 💧" + C_RST + "\n";
     std::cout << pad << C_BLK + "      .---' === '--.       " + C_CYN + "   /\\" + C_RST + "\n";
     std::cout << pad << C_BLK + "     /              \\      " + C_CYN + "  /  \\" + C_RST + "\n";
-    std::cout << pad << C_BLK + "    /   " + C_SKN + "(  WISZĄCY  )" + C_BLK + " \\     " + C_CYN + " / /\\ \\" + C_RST + "\n";
-    std::cout << pad << C_BLK + "   |    " + C_SKN + "(  BEBECH   )" + C_BLK + "  |    " + C_CYN + "/ /__\\ \\" + C_RST + "\n";
-    std::cout << pad << C_BLK + "   |    " + C_SKN + "( DO ZIEMI  )" + C_BLK + "  |    " + C_CYN + "archlinux" + C_RST + "\n";
+    std::cout << pad << C_BLK + "    /   " + bellyState + C_BLK + " \\     " + C_CYN + " / /\\ \\" + C_RST + "\n";
+    std::cout << pad << C_BLK + "   |    " + C_SKN + "(   TOTALNY   )" + C_BLK + "  |    " + C_CYN + "/ /__\\ \\" + C_RST + "\n";
+    std::cout << pad << C_BLK + "   |    " + C_SKN + "(    ZGON     )" + C_BLK + "  |    " + C_CYN + "archlinux" + C_RST + "\n";
     std::cout << pad << C_SKN + "    \\    '----------'   /   " + C_RST + "\n";
     std::cout << pad << C_SKN + "     '--.____________.-'    " + C_RST + "\n";
     std::cout << pad << C_BLK + "      /  /  |    \\  \\      " + C_YEL + "[ RĘCE NA KOLANACH ]" + C_RST + "\n";
@@ -213,17 +249,17 @@ void printExhaustedArchGuy(int pos) {
     std::cout << pad << C_BLU + "    (_/     |       \\_)     " + C_RST + "\n";
 }
 
-void runInstallationAnimation(Language lang) {
+void run7SecondInstallationAnimation(Language lang) {
     hideCursor();
     clearScreen();
 
-    auto frames = getRunningFrames();
+    auto frames = getDetailedRunningFrames();
     int termWidth = getTermWidth();
     if (termWidth < 70) termWidth = 70;
 
-    int maxRunnerPos = termWidth - 42;
+    int maxRunnerPos = termWidth - 44;
     if (maxRunnerPos < 10) maxRunnerPos = 10;
-    if (maxRunnerPos > 40) maxRunnerPos = 40;
+    if (maxRunnerPos > 38) maxRunnerPos = 38;
 
     struct StatusMsg {
         int percent;
@@ -232,27 +268,28 @@ void runInstallationAnimation(Language lang) {
     };
 
     std::vector<StatusMsg> msgs = {
-        {0,  "Start biegu! Bebech wpada w rezonans sejsmiczny...", "Start running! Belly enters seismic resonance..."},
-        {15, "0.00ms dotkniętej trawy... Przyspieszanie masy...", "0.00ms grass touched... Accelerating 300kg mass..."},
-        {30, "Kompilowanie C++20... Wylewanie 5 litrów potu...", "Compiling C++20... Pouring 5 liters of sweat..."},
-        {50, "Bebech podskakuje z częstotliwością 140 Hz (Wayland)...", "Belly bouncing at 140 Hz (Wayland smooth)..."},
-        {70, "Pobieranie zapasów Monster Energy z AUR na trasie...", "Grabbing Monster Energy cans from AUR stations..."},
-        {85, "Widzę metę! Płuca odmawiają posłuszeństwa! UFF...", "Finish line in sight! Lungs at 100% capacity..."},
-        {98, "Ostatni skok z rozpędu przez linię mety...", "Final massive leap across the finish line..."},
-        {100, "META OSIĄGNIĘTA! INSTALACJA ZAKOŃCZONA!", "FINISH LINE REACHED! INSTALLATION COMPLETE!"}
+        {0,  "Start maratonu! 300kg rusza z miejsca... Bebech drży!", "Marathon start! 300kg accelerating... Belly wobbles!"},
+        {12, "0.00ms dotkniętej trawy... Bebech osiąga rezonans 140Hz!", "0.00ms grass touched... Belly reaching 140Hz resonance!"},
+        {25, "Kompilowanie C++20... Wylewanie 8 litrów potu na sekundę!", "Compiling C++20... Pouring 8 liters of sweat per second!"},
+        {38, "Fałdy tłuszczu falują z prędkością dźwięku! *DUDUDU!*", "Fat folds rippling at speed of sound! *DUDUDU!*"},
+        {50, "Pobieranie 4500 kcal Monster Energy z AUR na punkcie odżywczym...", "Grabbing 4500 kcal Monster Energy cans from AUR stations..."},
+        {65, "Koszula Arch Linux trzeszczy w szwach! Maksymalny Jiggle!", "Arch Linux t-shirt stretching to limits! Maximum Jiggle!"},
+        {78, "Widzę linię mety! Płuca palą, kolana błagają o litość!", "Finish line in sight! Lungs burning, knees begging for mercy!"},
+        {90, "Ostatni potężny zryw bezwładności masy! ZARAZ META!", "Final massive leap of momentum! ALMOST THERE!"},
+        {100, "META PRZEKROCZONA! GRUBAS DOBIEGŁ! INSTALACJA UKOŃCZONA!", "FINISH LINE CROSSED! CHAD MADE IT! INSTALLATION COMPLETE!"}
     };
 
-    int totalSteps = 45;
+    // ~5.5 seconds running phase (70 steps * 78ms = 5.46 seconds)
+    int totalSteps = 70;
     for (int step = 0; step <= totalSteps; ++step) {
         resetCursor();
 
         int percent = (step * 100) / totalSteps;
         int runnerPos = (step * maxRunnerPos) / totalSteps;
-        int frameIdx = step % 4;
+        int frameIdx = step % 6;
 
         printBanner(lang);
 
-        // Find status message
         std::string currentStatus = msgs[0].pl;
         for (const auto& m : msgs) {
             if (percent >= m.percent) {
@@ -261,10 +298,9 @@ void runInstallationAnimation(Language lang) {
         }
 
         std::cout << "\033[1;33m"
-                  << ((lang == Language::PL) ? " [ ETAP 4/4: MARATON INSTALACYJNY ARCH CHADA ]\n\n" : " [ STEP 4/4: ARCH CHAD INSTALLATION MARATHON ]\n\n")
+                  << ((lang == Language::PL) ? " [ ETAP 4/4: 7-SEKUNDOWY MARATON BEBECHA ARCH CHADA ]\n\n" : " [ STEP 4/4: 7-SECOND ARCH CHAD BELLY JIGGLE MARATHON ]\n\n")
                   << "\033[0m";
 
-        // Render the running guy frame at offset `runnerPos`
         std::string pad(runnerPos, ' ');
         const auto& curFrame = frames[frameIdx];
 
@@ -275,7 +311,7 @@ void runInstallationAnimation(Language lang) {
         for (size_t lineIdx = 0; lineIdx < curFrame.lines.size(); ++lineIdx) {
             std::cout << pad << curFrame.lines[lineIdx];
             
-            // Render Finish Line banner on the right side
+            // Finish line post
             if (lineIdx == 0) {
                 std::cout << std::string(spaceAfterRunner, ' ') << "\033[1;37;41m 🏁 META / FINISH 🏁 \033[0m";
             } else if (lineIdx < 11) {
@@ -284,8 +320,8 @@ void runInstallationAnimation(Language lang) {
             std::cout << "\n";
         }
 
-        // Render detailed Progress Bar
-        int barWidth = 40;
+        // Detailed Progress Bar
+        int barWidth = 42;
         int filled = (percent * barWidth) / 100;
         std::string barStr = "";
         for (int b = 0; b < barWidth; ++b) {
@@ -297,18 +333,35 @@ void runInstallationAnimation(Language lang) {
         std::cout << "\n \033[1;36m[" << barStr << "] \033[1;32m" << percent << "%\033[0m\n";
         std::cout << " \033[1;37m" << currentStatus << "\033[0m\033[K\n";
 
-        sleepMs(65);
+        sleepMs(78);
     }
 
-    // Finished: Exhausted guy at the finish line!
+    // ~1.6 seconds exhausted breathing animation at finish line (4 breath pulses * 400ms = 1.6s)
+    for (int breath = 0; breath < 4; ++breath) {
+        clearScreen();
+        printBanner(lang);
+
+        std::cout << "\033[1;32m"
+                  << ((lang == Language::PL) ? " [ MARATON ZAKOŃCZONY - GRUBAS DOBIEGŁ I PADA Z WYCIEŃCZENIA! ]\n\n" : " [ MARATHON FINISHED - CHAD COLLAPSES IN EXHAUSTION AT THE FINISH LINE! ]\n\n")
+                  << "\033[0m";
+
+        printExhaustedBreathing(maxRunnerPos, breath);
+
+        std::cout << "\n \033[1;36m[██████████████████████████████████████████] \033[1;32m100%\033[0m\n";
+        std::cout << " \033[1;32m✔ INSTALACJA ZAKOŃCZONA SUKCESEM!\033[0m\n";
+
+        sleepMs(380);
+    }
+
+    // Final Victory Screen with Big Banner
     clearScreen();
     printBanner(lang);
 
     std::cout << "\033[1;32m"
-              << ((lang == Language::PL) ? " [ MARATON ZAKOŃCZONY - GRUBAS DOBIEGŁ DO METY! ]\n\n" : " [ MARATHON FINISHED - CHAD CROSSED THE FINISH LINE! ]\n\n")
+              << ((lang == Language::PL) ? " [ MARATON ZAKOŃCZONY - GRUBAS DOBIEGŁ I PADA Z WYCIEŃCZENIA! ]\n\n" : " [ MARATHON FINISHED - CHAD COLLAPSES IN EXHAUSTION AT THE FINISH LINE! ]\n\n")
               << "\033[0m";
 
-    printExhaustedArchGuy(maxRunnerPos);
+    printExhaustedBreathing(maxRunnerPos, 1);
 
     std::cout << "\n\033[1;32m"
               << "╔════════════════════════════════════════════════════════════════════════════════╗\n"
@@ -471,7 +524,6 @@ int main(int argc, char* argv[]) {
         initialConfig.palette = "default";
     }
 
-    // Save configured identity
     ConfigManager::saveConfig(initialConfig);
 
     // KROK 2: Install Path selection
@@ -527,13 +579,12 @@ int main(int argc, char* argv[]) {
     std::getline(std::cin, addShell);
     bool autoStart = (addShell.empty() || addShell == "t" || addShell == "T" || addShell == "y" || addShell == "Y" || addShell == "tak" || addShell == "yes");
 
-    // Perform compilation if needed before starting animation
     if (!fs::exists("./fatfetch")) {
         system("make fatfetch >/dev/null 2>&1");
     }
 
-    // 🏃 RUN THE EPIC BELLY JIGGLE & MARATHON INSTALLATION ANIMATION!
-    runInstallationAnimation(lang);
+    // 🏃💨 RUN 7-SECOND ULTRA DETAILED BELLY JIGGLE MARATHON ANIMATION!
+    run7SecondInstallationAnimation(lang);
 
     // File copy to destinations
     std::string userLocalBin = homeDir + "/.local/bin";
