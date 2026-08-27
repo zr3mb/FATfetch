@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++20 -O2 -Wall -Wextra -static-libstdc++ -static-libgcc -Isrc
 PREFIX ?= /usr/local
 DIST_ZIP = FATfetch-standalone.zip
 
-SRC = src/main.cpp src/sysinfo.cpp src/jokes.cpp src/ascii_art.cpp src/display.cpp src/locales.cpp
+SRC = src/main.cpp src/sysinfo.cpp src/jokes.cpp src/ascii_art.cpp src/display.cpp src/locales.cpp src/palettes.cpp src/config.cpp src/tui_config.cpp
 INSTALLER_SRC = src/installer/installer.cpp src/locales.cpp
 
 all: fatfetch fatfetch-installer
@@ -26,7 +26,7 @@ uninstall:
 
 zip: all
 	chmod +x install.sh fatfetch fatfetch-installer
-	zip -r $(DIST_ZIP) fatfetch fatfetch-installer install.sh README.md Makefile PKGBUILD src/
+	zip -r $(DIST_ZIP) fatfetch fatfetch-installer install.sh README.md Makefile PKGBUILD LICENSE src/
 	@echo "Created $(DIST_ZIP) successfully!"
 
 clean:

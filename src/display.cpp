@@ -1,6 +1,7 @@
 #include "display.hpp"
 #include "jokes.hpp"
 #include "locales.hpp"
+#include "palettes.hpp"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -9,10 +10,32 @@ namespace FATfetch {
 
 void DisplayManager::printHelp(Language lang) {
     std::cout << LocaleManager::getHelpText(lang);
+    std::cout << "\n\033[1;35mKONFIGURACJA / TUI & PALETY:\033[0m\n"
+              << "  -c, --config          Uruchom interaktywny graficzny konfigurator TUI\n"
+              << "  -p, --palette <nazwa> Wybierz paletę kolorów: femboy, trans, rainbow, bi, pan, nonbinary, lesbian, catppuccin, dracula\n"
+              << "  --list-palettes       Wyświetl listę dostępnych palet i motywów kolorystycznych\n"
+              << "  --list-logos          Wyświetl listę dostępnych postaci i logotypów ASCII\n\n";
 }
 
 void DisplayManager::printVersion(Language lang) {
     std::cout << LocaleManager::getVersionText(lang);
+}
+
+void DisplayManager::listPalettes() {
+    std::cout << "\n\033[1;36m[ DOSTĘPNE PALETY KOLORÓW / PRIDE & AESTHETICS ]\033[0m\n\n";
+    for (const auto& pal : PaletteManager::getAllPalettes()) {
+        std::cout << "  • \033[1m" << pal.id << "\033[0m (" << pal.name << "):\n"
+                  << "    " << pal.previewBar << "\n\n";
+    }
+}
+
+void DisplayManager::listLogos() {
+    std::cout << "\n\033[1;36m[ DOSTĘPNE POSTACIE I LOGA ASCII ]\033[0m\n\n";
+    std::cout << "  1) \033[1marchguy\033[0m      - Legendarny gość w koszulce Arch Linux (Domyślne)\n"
+              << "  2) \033[1mfatfemboy\033[0m    - Gruby femboy w zakolanówkach i bluzie Arch Linux 300kg UwU\n"
+              << "  3) \033[1mfatarch\033[0m      - Ultra-szerokie, spasiony logo Archa /\\\n"
+              << "  4) \033[1mdiscordmod\033[0m   - Mod z piwnicy\n"
+              << "  5) \033[1mminimal\033[0m      - Małe logo dla małych terminali\n\n";
 }
 
 void DisplayManager::renderJokeOnly(Language lang, bool raw) {
@@ -45,7 +68,8 @@ void DisplayManager::render(const SysInfo& info, const DisplayConfig& config) {
         return;
     }
 
-    AsciiLogo logo = AsciiManager::getLogo(config.logoName, config.raw);
+    AsciiLogo logo = AsciiManager::getLogo(config.logoName, config.raw, config.paletteName);
+    Palette pal = PaletteManager::getPalette(config.paletteName);
 
     // Color definitions
     std::string C_RST = config.raw ? "" : "\033[0m";
@@ -59,10 +83,23 @@ void DisplayManager::render(const SysInfo& info, const DisplayConfig& config) {
     std::string C_WHT = config.raw ? "" : "\033[1;37m";
     std::string C_GRY = config.raw ? "" : "\033[38;5;244m";
 
+    if (config.paletteName != "default" && !pal.ansiColors.empty() && !config.raw) {
+        C_CYN = pal.ansiColors[0];
+        if (pal.ansiColors.size() > 1) C_MAG = pal.ansiColors[1];
+        if (pal.ansiColors.size() > 2) C_BLU = pal.ansiColors[2];
+        if (pal.ansiColors.size() > 3) C_GRN = pal.ansiColors[3];
+    }
+
+    // Title formatting
+    std::string titleStr = info.userHostTitle;
+    if (config.logoName == "fatfemboy") {
+        titleStr = info.username + "@" + info.hostname + " [Chonky Femboy UwU]";
+    }
+
     // Prepare info lines
     std::vector<std::string> infoLines;
-    infoLines.push_back(C_CYN + C_BLD + info.userHostTitle + C_RST);
-    infoLines.push_back(C_GRY + std::string(info.userHostTitle.length() > 50 ? 50 : info.userHostTitle.length(), '-') + C_RST);
+    infoLines.push_back(C_CYN + C_BLD + titleStr + C_RST);
+    infoLines.push_back(C_GRY + std::string(titleStr.length() > 50 ? 50 : titleStr.length(), '-') + C_RST);
 
     auto addField = [&](const std::string& labelColor, const std::string& label, const std::string& val) {
         infoLines.push_back(labelColor + C_BLD + label + ": " + C_RST + val);
@@ -87,16 +124,22 @@ void DisplayManager::render(const SysInfo& info, const DisplayConfig& config) {
     addField(C_RED, info.labels.girlfriend, info.girlfriend);
 
     // Add empty line and color blocks
-    infoLines.push_back("");
-    if (!config.raw) {
-        std::string colorBlocks = 
-            "\033[40m   \033[41m   \033[42m   \033[43m   \033[44m   \033[45m   \033[46m   \033[47m   \033[0m";
-        std::string lightBlocks = 
-            "\033[100m   \033[101m   \033[102m   \033[103m   \033[104m   \033[105m   \033[106m   \033[107m   \033[0m";
-        infoLines.push_back(colorBlocks);
-        infoLines.push_back(lightBlocks);
-    } else {
-        infoLines.push_back("[███][███][███][███][███][███][███][███]");
+    if (config.showColorBlocks) {
+        infoLines.push_back("");
+        if (!config.raw) {
+            if (config.paletteName != "default") {
+                infoLines.push_back(pal.previewBar);
+            } else {
+                std::string colorBlocks = 
+                    "\033[40m   \033[41m   \033[42m   \033[43m   \033[44m   \033[45m   \033[46m   \033[47m   \033[0m";
+                std::string lightBlocks = 
+                    "\033[100m   \033[101m   \033[102m   \033[103m   \033[104m   \033[105m   \033[106m   \033[107m   \033[0m";
+                infoLines.push_back(colorBlocks);
+                infoLines.push_back(lightBlocks);
+            }
+        } else {
+            infoLines.push_back("[███][███][███][███][███][███][███][███]");
+        }
     }
 
     // Zip logo.lines and infoLines side by side
@@ -114,15 +157,17 @@ void DisplayManager::render(const SysInfo& info, const DisplayConfig& config) {
         std::cout << logoLine << std::string(spaceNeeded, ' ') << infoLine << "\n";
     }
 
-    // Print randomized Arch Joke in a nice banner
-    if (!config.raw) {
-        std::string bannerTitle = "┌─[ " + info.labels.jokeBannerTitle + " ]";
-        size_t padLen = (bannerTitle.length() < 70) ? (70 - bannerTitle.length()) : 5;
-        std::cout << "\n " << C_YEL << C_BLD << bannerTitle << std::string(padLen, '-') << "┐" << C_RST << "\n";
-        std::cout << " " << C_YEL << "│" << C_RST << " " << C_WHT << info.archQuote << C_RST << "\n";
-        std::cout << " " << C_YEL << C_BLD << "└" << std::string(66, '-') << "┘" << C_RST << "\n\n";
-    } else {
-        std::cout << "\n--- " << info.labels.jokeBannerTitle << " ---\n" << info.archQuote << "\n\n";
+    // Print randomized Arch Joke in banner if enabled
+    if (config.showJoke) {
+        if (!config.raw) {
+            std::string bannerTitle = "┌─[ " + info.labels.jokeBannerTitle + " ]";
+            size_t padLen = (bannerTitle.length() < 70) ? (70 - bannerTitle.length()) : 5;
+            std::cout << "\n " << C_YEL << C_BLD << bannerTitle << std::string(padLen, '-') << "┐" << C_RST << "\n";
+            std::cout << " " << C_YEL << "│" << C_RST << " " << C_WHT << info.archQuote << C_RST << "\n";
+            std::cout << " " << C_YEL << C_BLD << "└" << std::string(66, '-') << "┘" << C_RST << "\n\n";
+        } else {
+            std::cout << "\n--- " << info.labels.jokeBannerTitle << " ---\n" << info.archQuote << "\n\n";
+        }
     }
 }
 

@@ -4,97 +4,105 @@
 [![Bloat Level](https://img.shields.io/badge/Bloat-OVER_9000-ff0055)](#)
 [![Hygiene](https://img.shields.io/badge/Shower-0%20Days-critical)](#)
 [![Grass Status](https://img.shields.io/badge/Grass-Untouched-red)](#)
-[![Locales](https://img.shields.io/badge/Locales-PL%20%7C%20EN-blue)](#)
+[![Femboy Mode](https://img.shields.io/badge/Femboy-300kg%20UwU-ff69b4)](#)
+[![Hyfetch Palettes](https://img.shields.io/badge/Palettes-10%20Themes-9c59d1)](#)
 
 > *"Bo Twój zwykły fastfetch/neofetch nie był wystarczająco spasiony, a świat musi wiedzieć, że używasz Archa (btw)."*  
 > *"Because your regular fetch wasn't bloated enough, and everyone must know you use Arch btw."*
 
-**FATfetch** to satyryczny, potężny i superszybki odpowiednik narzędzi typu `neofetch`/`fastfetch` napisany w **C++20** z dedykacją dla społeczności **Arch Linux**. Zamiast nudnych statystyk, FATfetch serwuje bezlitosne roasty o niebraniu prysznica, 500 godzinach spędzonych na animacjach w Hyprlandzie, braku dziewczyny i diecie opartej na Monsterkach z AUR.
+**FATfetch** to satyryczny, potężny i superszybki odpowiednik narzędzi typu `neofetch`/`fastfetch`/`hyfetch` napisany w **C++20** z dedykacją dla społeczności **Arch Linux**.
 
 ---
 
-## 📸 Funkcje / Features
+## 📸 Nowe Funkcje / Features
 
-- 🦣 **Arch T-Shirt Big Guy w ASCII**: Klasyczny, kultowy mem z potężnym gościem w koszulce Arch Linux w wielokolorowym ANSI art.
-- 🌐 **Pełne wsparcie dla Locales (Polski 🇵🇱 / English 🇺🇸)**:
-  - Automatyczne wykrywanie języka systemu (`$LANG` / `$LC_ALL`).
-  - Możliwość wymuszenia języka: `fatfetch --lang pl` lub `fatfetch --lang en`.
-  - Osobne, dedykowane bazy żartów, roastów, etykiet i planów dietetycznych dla każdego języka.
-- ⚡ **Natywny C++20**: Zero bloatu w kodzie (maksimum bloatu w statystykach). Działa błyskawicznie bez zbędnych zależności.
-- 🧠 **Generator żartów i roastów o Archu**: Za każdym odpaleniem dostajesz nową dawkę humoru o użytkownikach Archa, `pacman -Syu`, Neovimie i zakolanówkach.
-- 🖥️ **Prawdziwe dane z systemu z memicznym twistem**:
-  - Pakiety: *979 (pacman/AUR), 2 (flatpakowy bloat)*
-  - Uptime: *420d 69m (zero restartów, zero prysznica)*
-  - Pamięć: *94% zjedzone przez Discorda i 50 kart Arch Wiki*
-  - Grass / Trawa: *0.00 ms (Rekord życiowy: trawnik nie wspiera Waylanda)*
-  - Dziewczyna: *Błąd segmentacji (zrzut pamięci) - Brak w repozytoriach*
-- 🛠️ **Interaktywny instalator TUI (`fatfetch-installer` / `./install.sh`)**: Z wyborem języka, animacją kompilacji, wyborem ścieżki instalacji i opcją dodania do `.bashrc`/`.zshrc`.
-- 📦 **Wsparcie dla PKGBUILD**: Możliwość budowania przez `makepkg -si`.
+- 🌸 **Gruby Femboy w ASCII (`fatfemboy`)**: 300kg UwU w zakolanówkach programistycznych (programming socks) i za dużej bluzie z logo Arch Linux.
+- 🎨 **Palety kolorów niczym w Hyfetchu (Pride / LGBT / Aesthetics)**:
+  - `femboy` (Pastel Pink / White / Cyan)
+  - `trans` (Transgender Pride Flag)
+  - `rainbow` / `pride` (Classic Rainbow Pride Flag)
+  - `bi` (Bisexual Pride Flag)
+  - `pan` (Pansexual Pride Flag)
+  - `nonbinary` (Non-Binary Pride Flag)
+  - `lesbian` (Lesbian Pride Flag)
+  - `catppuccin` (Catppuccin Mocha Palette)
+  - `dracula` (Cyberpunk Dracula Palette)
+  - `default` (Arch Classic Cyan)
+- 🎛️ **Graficzny konfigurator TUI (`fatfetch --config`)**:
+  - Interaktywne menu w terminalu z **podglądem na żywo (Live Preview)** logo ASCII oraz pasków kolorów.
+  - Zapisywanie konfiguracji w `~/.config/fatfetch/config.conf`.
+- 🦣 **Arch T-Shirt Big Guy w ASCII (`archguy`)**: Kultowy mem z potężnym gościem w koszulce Arch Linux w wielokolorowym ANSI art.
+- 🌐 **Wielojęzyczność (Polski 🇵🇱 / English 🇺🇸)**: Osobne bazy żartów, etykiet i diet.
+- ⚡ **C++20 ze statycznym linkowaniem**: Błyskawiczny czas uruchomienia, 0 zależności.
 
 ---
 
 ## 🚀 Szybka instalacja / Quick Install
 
-### Opcja 1: Interaktywny instalator TUI (Zalecane / Recommended)
 ```bash
+git clone https://github.com/zr3mb/FATfetch.git
+cd FATfetch
 ./install.sh
 ```
-*Instalator zapyta o język (Polski / English), wyświetli potężnego gościa w ASCII i pozwoli zainstalować program do `~/.local/bin/fatfetch` lub `/usr/local/bin/fatfetch`.*
 
-### Opcja 2: Kompilacja przez `make`
+---
+
+## 🕹️ Konfigurator TUI & Komendy
+
+### Uruchomienie graficznego konfiguratora TUI:
 ```bash
-make
-make install
+fatfetch --config
 ```
 
-### Opcja 3: Arch Linux `PKGBUILD`
+### Przykłady wywołania z flagami:
 ```bash
-makepkg -si
+# Uruchomienie z grubym femboyem i pastelową paletą Femboy
+fatfetch --logo fatfemboy --palette femboy
+
+# Paleta Trans Pride
+fatfetch --palette trans
+
+# Paleta Rainbow / Pride
+fatfetch --palette rainbow
+
+# Motyw Catppuccin Mocha
+fatfetch --palette catppuccin
+
+# Lista wszystkich dostępnych palet z kolorowymi podglądami
+fatfetch --list-palettes
+
+# Lista dostępnych postaci ASCII
+fatfetch --list-logos
+
+# Losowy żart o Archu
+fatfetch --joke
 ```
 
 ---
 
-## 🕹️ Użycie i Flagi / Usage & Flags
+## ⚙️ Plik konfiguracyjny (`~/.config/fatfetch/config.conf`)
 
-```bash
-# Standardowy fetch (automatycznie dopasowuje język systemu)
-fatfetch
+Konfigurację możesz edytować przez TUI (`fatfetch --config`) lub ręcznie w pliku:
 
-# Wymuszenie języka polskiego lub angielskiego
-fatfetch --lang pl
-fatfetch --lang en
+```ini
+# Logo preset: archguy, fatfemboy, fatarch, discordmod, minimal
+logo = fatfemboy
 
-# Wybierz inne logo ASCII (archguy, fatarch, discordmod, minimal)
-fatfetch --logo fatarch
-fatfetch --logo discordmod
+# Color palette: default, femboy, trans, rainbow, bi, pan, nonbinary, lesbian, catppuccin, dracula
+palette = femboy
 
-# Wylosuj tylko świeży żart o Archu (po polsku lub angielsku)
-fatfetch -j
-fatfetch --lang en --joke
+# Language: pl, en
+lang = pl
 
-# Wyświetl oficjalną dietę 4500 kcal użytkownika Archa
-fatfetch --diet
-fatfetch --lang en --diet
+# Show randomized Arch Linux meme joke on run
+show_joke = true
 
-# Tryb surowy (bez kolorów ANSI)
-fatfetch --raw
-
-# Pomoc i wersja
-fatfetch --help
-fatfetch --version
+# Show bottom color palette blocks
+color_blocks = true
 ```
-
----
-
-## 🖼️ Dostępne presety ASCII Logo
-
-1. `archguy` *(domyślne)* - Legendarny gość w koszulce Arch Linux.
-2. `fatarch` - Ultra-szerokie, spasiony logo Archa `/\`.
-3. `discordmod` - Mod z piwnicy.
-4. `minimal` - Kompaktowe małe logo dla małych okienek terminala.
 
 ---
 
 ## 📜 Licencja
 
-MIT - Używaj, forku i pamiętaj: *BTW, I use Arch.*
+MIT - *BTW, I use Arch.*

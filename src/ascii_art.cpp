@@ -1,4 +1,5 @@
 #include "ascii_art.hpp"
+#include "palettes.hpp"
 #include <regex>
 #include <algorithm>
 
@@ -6,7 +7,6 @@ namespace FATfetch {
 
 size_t AsciiManager::calculateVisibleLength(const std::string& str) {
     std::string clean = stripAnsi(str);
-    // Simple UTF-8 length calculation
     size_t len = 0;
     for (size_t i = 0; i < clean.length(); ) {
         unsigned char c = clean[i];
@@ -35,15 +35,15 @@ std::string AsciiManager::stripAnsi(const std::string& str) {
 }
 
 std::vector<std::string> AsciiManager::getAvailableLogos() {
-    return {"archguy", "fatarch", "discordmod", "minimal"};
+    return {"archguy", "fatfemboy", "fatarch", "discordmod", "minimal"};
 }
 
-AsciiLogo AsciiManager::getLogo(const std::string& name, bool raw) {
+AsciiLogo AsciiManager::getLogo(const std::string& name, bool raw, const std::string& paletteName) {
     AsciiLogo logo;
     logo.name = name;
+    Palette pal = PaletteManager::getPalette(paletteName);
 
     std::string C_RST = raw ? "" : "\033[0m";
-    std::string C_BLD = raw ? "" : "\033[1m";
     std::string C_CYN = raw ? "" : "\033[1;36m";
     std::string C_BLU = raw ? "" : "\033[1;34m";
     std::string C_GRY = raw ? "" : "\033[38;5;240m";
@@ -52,8 +52,43 @@ AsciiLogo AsciiManager::getLogo(const std::string& name, bool raw) {
     std::string C_SKN = raw ? "" : "\033[38;5;216m";
     std::string C_BLK = raw ? "" : "\033[38;5;233m";
     std::string C_MAG = raw ? "" : "\033[1;35m";
+    std::string C_PNK = raw ? "" : "\033[38;5;218m";
+    std::string C_HPK = raw ? "" : "\033[38;5;198m";
 
-    if (name == "fatarch") {
+    // If a custom palette is selected, override primary highlight color
+    if (paletteName != "default" && !pal.ansiColors.empty() && !raw) {
+        C_CYN = pal.ansiColors[0];
+        if (pal.ansiColors.size() > 1) C_PNK = pal.ansiColors[1];
+        if (pal.ansiColors.size() > 2) C_MAG = pal.ansiColors[2];
+        if (pal.ansiColors.size() > 3) C_HPK = pal.ansiColors[3];
+    }
+
+    if (name == "fatfemboy") {
+        // The legendary CHUNKY FEMBOY in programming socks & oversized Arch hoodie
+        logo.lines = {
+            C_PNK + "              /\\___/\\             " + C_RST,
+            C_PNK + "             (  > ω < )  " + C_HPK + "♥ ♥ ♥    " + C_RST,
+            C_SKN + "            /|   " + C_HPK + "///" + C_SKN + "   |\\           " + C_RST,
+            C_PNK + "           ( |  " + C_HPK + "[BLUSH]" + C_PNK + "  | )          " + C_RST,
+            C_BLK + "       .---'            '---.     " + C_RST,
+            C_BLK + "     /     " + C_PNK + "* chonky hoodie *" + C_BLK + "  \\   " + C_RST,
+            C_BLK + "    /           " + C_CYN + "/\\" + C_BLK + "              \\  " + C_RST,
+            C_BLK + "   /           " + C_CYN + "/  \\" + C_BLK + "              \\ " + C_RST,
+            C_BLK + "  /           " + C_CYN + "/ /\\ \\" + C_BLK + "              \\" + C_RST,
+            C_BLK + " |           " + C_CYN + "/ /__\\ \\" + C_BLK + "              |" + C_RST,
+            C_BLK + " |          " + C_CYN + "/_/    \\_\\" + C_BLK + "             |" + C_RST,
+            C_BLK + " |          " + C_CYN + "archlinux" + C_BLK + "              |" + C_RST,
+            C_BLK + " |                                 |" + C_RST,
+            C_PNK + "  \\    (  300kg UWU TUMMY  )      /  " + C_RST,
+            C_SKN + "   '---.___________________..--'   " + C_RST,
+            C_PNK + "       /                   \\       " + C_RST,
+            C_PNK + "      /  [STRIPED SOCKS]    \\      " + C_RST,
+            C_CYN + "     (===)  (===)    (===)  (===)  " + C_RST,
+            C_PNK + "     (===)  (===)    (===)  (===)  " + C_RST,
+            C_CYN + "     (===)  (===)    (===)  (===)  " + C_RST,
+            C_PNK + "    (_____) (____)  (____) (_____) " + C_RST
+        };
+    } else if (name == "fatarch") {
         logo.lines = {
             C_CYN + "                 /\\" + C_RST,
             C_CYN + "                /  \\" + C_RST,
@@ -99,7 +134,6 @@ AsciiLogo AsciiManager::getLogo(const std::string& name, bool raw) {
             C_WHT + "  [FAT]  " + C_RST
         };
     } else { // default: "archguy"
-        // The legendary guy in the Arch Linux T-shirt from the meme!
         logo.lines = {
             C_DGR + "               .---.             " + C_RST,
             C_DGR + "             /  '-. \\           " + C_RST,
@@ -125,7 +159,6 @@ AsciiLogo AsciiManager::getLogo(const std::string& name, bool raw) {
         };
     }
 
-    // Compute max width
     size_t maxWidth = 0;
     for (const auto& line : logo.lines) {
         size_t len = calculateVisibleLength(line);
