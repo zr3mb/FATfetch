@@ -9,7 +9,6 @@
 #include <fstream>
 #include <unistd.h>
 #include <sys/stat.h>
-#include <termios.h>
 
 namespace fs = std::filesystem;
 using FATfetch::Language;
@@ -113,9 +112,16 @@ int main(int argc, char* argv[]) {
     Language lang = LocaleManager::detectSystemLanguage();
     bool langPreselected = false;
 
+    // Fast flag check
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
-        if ((arg == "-L" || arg == "--lang") && i + 1 < argc) {
+        if (arg == "-v" || arg == "--version") {
+            std::cout << "fatfetch-installer v4.2.0\n";
+            return 0;
+        } else if (arg == "-h" || arg == "--help") {
+            std::cout << "Usage: ./fatfetch-installer [--lang=pl|en]\n";
+            return 0;
+        } else if ((arg == "-L" || arg == "--lang") && i + 1 < argc) {
             lang = LocaleManager::parseLanguage(argv[++i]);
             langPreselected = true;
         } else if (arg.rfind("--lang=", 0) == 0) {
@@ -240,28 +246,20 @@ int main(int argc, char* argv[]) {
 
     std::vector<Step> steps = {
         {10, "Sprawdzanie poziomu bloatu w systemie...", "Analyzing system bloat and neckbeard index..."},
-        {25, "Usuwanie resztek higieny osobistej i sterowników dźwięku...", "Removing hygiene modules and unnecessary audio drivers..."},
-        {45, "Weryfikacja kompatybilności binarnej FATfetch...", "Verifying binary compatibility of FATfetch..."},
-        {65, "Pobieranie 4500 kcal zapasów Monster Energy z AUR...", "Downloading 4500 kcal Monster Energy crates from AUR..."},
-        {85, "Zapisywanie binarki i generowanie certyfikatu 'I Use Arch Btw'...", "Writing binary and generating 'I Use Arch Btw' certificate..."},
+        {35, "Optymalizowanie modułów higieny osobistej...", "Optimizing hygiene modules and audio drivers..."},
+        {65, "Weryfikacja binarnego bóstwa C++20 FATfetch...", "Verifying precompiled C++20 FATfetch binary..."},
+        {85, "Pobieranie 4500 kcal zapasów Monster Energy z AUR...", "Downloading 4500 kcal Monster Energy crates from AUR..."},
         {100, "Instalacja zakończona sukcesem!", "Installation completed successfully!"}
     };
 
-    // If fatfetch binary does not exist or fails, build it
-    bool needBuild = !fs::exists("./fatfetch");
-    if (!needBuild) {
-        int testRes = system("./fatfetch --version >/dev/null 2>&1");
-        if (testRes != 0) needBuild = true;
-    }
-    if (needBuild) {
+    if (!fs::exists("./fatfetch")) {
         system("make fatfetch >/dev/null 2>&1");
     }
 
     for (const auto& step : steps) {
         std::string msg = (lang == Language::PL) ? step.msgPL : step.msgEN;
-        std::cout << "\r\033[K\033[1;36m[" << step.percent << "%]\033[0m \033[1;37m" << msg << "\033[0m" << std::flush;
-        sleepMs(250);
-        std::cout << "\n";
+        std::cout << "\r\033[K\033[1;36m[" << step.percent << "%]\033[0m \033[1;37m" << msg << "\033[0m\n";
+        sleepMs(60);
     }
 
     // File copy
@@ -284,7 +282,6 @@ int main(int argc, char* argv[]) {
             std::cout << "\n\033[1;32m✔ Binary installed to: \033[1;37m" << targetPath << "\033[0m\n";
         }
 
-        // Configure PATH and aliases in shell configuration files
         configureShellIntegration(homeDir, targetPath, autoStart, lang);
     }
 
