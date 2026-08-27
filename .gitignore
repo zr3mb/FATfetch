@@ -1,0 +1,13 @@
+# Binaries and build artifacts
+fatfetch
+fatfetch-installer
+fatfetch_static
+*.zip
+*.tar.gz
+*.o
+
+# Arch build artifacts
+pkg/
+srcdir/
+*.pkg.tar.zst
+*.pkg.tar.xz

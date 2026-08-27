@@ -1,0 +1,33 @@
+# Maintainer: Your Name <your.email@example.com>
+pkgname=fatfetch-git
+_pkgname=fatfetch
+pkgver=4.2.0.r1.ga1b2c3d
+pkgrel=1
+pkgdesc="The heaviest, satirical neofetch/fastfetch clone in C++ for Arch Linux enthusiasts"
+arch=('x86_64')
+url="https://github.com/YOUR_GITHUB_USERNAME/FATfetch"
+license=('MIT')
+depends=('glibc')
+makedepends=('git' 'gcc' 'make')
+provides=('fatfetch')
+conflicts=('fatfetch')
+source=("git+https://github.com/YOUR_GITHUB_USERNAME/FATfetch.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/$_pkgname"
+    git describe --long --tags --abbrev=7 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "4.2.0.r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+build() {
+    cd "$srcdir/$_pkgname"
+    make fatfetch
+}
+
+package() {
+    cd "$srcdir/$_pkgname"
+    install -Dm755 fatfetch "$pkgdir/usr/bin/fatfetch"
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
