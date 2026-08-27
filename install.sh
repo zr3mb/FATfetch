@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-#  🍔 FATfetch - Standalone Universal Fast Installer
+#  🍔 FATfetch - Universal Installer
 # ==============================================================================
 
 set -e
@@ -8,7 +8,7 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 cd "$DIR"
 
-# Ensure execute permissions on bundled binaries
+# Ensure execute permissions on bundled binaries if present
 chmod +x ./fatfetch ./fatfetch-installer 2>/dev/null || true
 
 # If precompiled TUI installer exists, launch directly!
@@ -16,16 +16,19 @@ if [[ -f "./fatfetch-installer" && -x "./fatfetch-installer" ]]; then
     exec ./fatfetch-installer "$@"
 fi
 
-# If missing, build quickly with parallel cores
+# If binaries are not compiled yet, show clean message and compile
+echo -e "\033[1;36m[FATfetch]\033[0m Inicjalizacja instalatora..."
+
 if command -v g++ &>/dev/null && command -v make &>/dev/null; then
-    make -j$(nproc 2>/dev/null || echo 2) all >/dev/null 2>&1 || true
+    echo -e "\033[1;33m[FATfetch]\033[0m Kompilowanie C++20 dla Twojego procesora..."
+    make -j"$(nproc 2>/dev/null || echo 2)" all
     chmod +x ./fatfetch ./fatfetch-installer 2>/dev/null || true
     if [[ -f "./fatfetch-installer" && -x "./fatfetch-installer" ]]; then
         exec ./fatfetch-installer "$@"
     fi
 fi
 
-# Fallback quick shell installer
+# Fallback quick shell installer if compiler is not present
 clear 2>/dev/null || true
 echo -e "\033[1;36m"
 cat << 'EOF'
@@ -125,7 +128,7 @@ done
 
 if [[ "$LANG" == "pl" ]]; then
     echo -e "\n\033[1;32m✔ FATfetch został pomyślnie zainstalowany w $BIN_DIR/fatfetch!\033[0m"
-    echo -e "\033[1;33m💡 WSKAZÓWKA:\033[0m Aby zmienić ustawienia, wpisz: \033[1;36mfatfetch --config\033[0m\n"
+    echo -e "\033[1;33m💡 WSKAZÓWKA:\033[0m Aby zmienić ustawienia w dowolnym momencie, wpisz: \033[1;36mfatfetch --config\033[0m\n"
 else
     echo -e "\n\033[1;32m✔ FATfetch successfully installed to $BIN_DIR/fatfetch!\033[0m"
     echo -e "\033[1;33m💡 TIP:\033[0m To change settings anytime, run: \033[1;36mfatfetch --config\033[0m\n"
