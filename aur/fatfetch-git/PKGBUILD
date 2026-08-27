@@ -1,17 +1,17 @@
-# Maintainer: Your Name <your.email@example.com>
+# Maintainer: zr3mb <zr3mbeq@outlook.com>
 pkgname=fatfetch-git
-_pkgname=fatfetch
+_pkgname=FATfetch
 pkgver=4.2.0.r1.ga1b2c3d
 pkgrel=1
 pkgdesc="The heaviest, satirical neofetch/fastfetch clone in C++ for Arch Linux enthusiasts"
 arch=('x86_64')
-url="https://github.com/YOUR_GITHUB_USERNAME/FATfetch"
+url="https://github.com/zr3mb/FATfetch"
 license=('MIT')
 depends=('glibc')
 makedepends=('git' 'gcc' 'make')
 provides=('fatfetch')
 conflicts=('fatfetch')
-source=("git+https://github.com/YOUR_GITHUB_USERNAME/FATfetch.git")
+source=("git+https://github.com/zr3mb/FATfetch.git")
 sha256sums=('SKIP')
 
 pkgver() {
