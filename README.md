@@ -49,6 +49,26 @@ cd FATfetch
 
 ## 🕹️ Konfigurator TUI & Komendy
 
+### 🎮 Discord Rich Presence (`fatrpc` / `fatfetch --rpc`):
+Wyświetla na Twoim profilu Discordzie status z wybraną postacią (Arch Chad, Gruby Femboy, Discord Mod) oraz statystykami:
+```bash
+# Włącz autostart demona w tle (systemd / XDG autostart):
+fatrpc enable
+# lub: fatfetch --rpc-enable
+
+# Wyłącz autostart:
+fatrpc disable
+
+# Sprawdź status połączenia z Discordem i demona:
+fatrpc status
+
+# Odpal w trybie podglądu na żywo w bieżącym terminalu:
+fatrpc
+# lub: fatfetch --rpc
+```
+
+---
+
 ### 🚀 Nowy Widżet: `fatjump` (Skaczący Grubas w Slow-Mo):
 Odpala w pętli ultra-płynną animację w zwolnionym tempie ze skaczącym grubasem, fizyką falującego bebecha, latającymi puszkami Monstera, chrupkami i sejsmografem Richtera:
 ```bash

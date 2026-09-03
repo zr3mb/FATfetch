@@ -1,6 +1,7 @@
 #include "../locales.hpp"
 #include "../config.hpp"
 #include "../tui_config.hpp"
+#include "../discord_rpc.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,6 +20,7 @@ using FATfetch::LocaleManager;
 using FATfetch::AppConfig;
 using FATfetch::ConfigManager;
 using FATfetch::TuiConfigurator;
+using FATfetch::DiscordRPC;
 
 void clearScreen() {
     std::cout << "\033[2J\033[H" << std::flush;
@@ -564,12 +566,12 @@ int main(int argc, char* argv[]) {
     clearScreen();
     printBanner(lang);
     if (lang == Language::PL) {
-        std::cout << "\033[1;33m[ KROK 3/3: INTEGRACJA Z POWŁOKĄ ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ KROK 3/4: INTEGRACJA Z POWŁOKĄ ]\033[0m\n\n";
         std::cout << "Czy chcesz automatycznie dodać 'fatfetch' do pliku startowego Twojej powłoki\n"
                   << "(~/.bashrc lub ~/.zshrc), aby FATfetch witał Cię przy każdym otwarciu terminala?\n\n";
-        std::cout << "Dodać do autostartu? [T/n]: ";
+        std::cout << "Dodać do autostartu terminala? [T/n]: ";
     } else {
-        std::cout << "\033[1;33m[ STEP 3/3: SHELL STARTUP INTEGRATION ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ STEP 3/4: SHELL STARTUP INTEGRATION ]\033[0m\n\n";
         std::cout << "Would you like to append 'fatfetch' to your shell startup file\n"
                   << "(~/.bashrc or ~/.zshrc) to remind you of your status every time you open a terminal?\n\n";
         std::cout << "Add to shell rc? [Y/n]: ";
@@ -579,8 +581,27 @@ int main(int argc, char* argv[]) {
     std::getline(std::cin, addShell);
     bool autoStart = (addShell.empty() || addShell == "t" || addShell == "T" || addShell == "y" || addShell == "Y" || addShell == "tak" || addShell == "yes");
 
+    // KROK 4: Discord Rich Presence question
+    clearScreen();
+    printBanner(lang);
+    if (lang == Language::PL) {
+        std::cout << "\033[1;33m[ KROK 4/4: DISCORD RICH PRESENCE (RPC) ]\033[0m\n\n";
+        std::cout << "Czy chcesz włączyć w tle demona Discord Rich Presence (autostart ze statusem FATfetch\n"
+                  << "\"300kg Arch Chad - 0 dni bez prysznica\" na Twoim profilu Discord)?\n\n";
+        std::cout << "Włączyć Discord RPC w autostarcie? [T/n]: ";
+    } else {
+        std::cout << "\033[1;33m[ STEP 4/4: DISCORD RICH PRESENCE (RPC) ]\033[0m\n\n";
+        std::cout << "Would you like to enable the background Discord Rich Presence daemon on startup\n"
+                  << "to display your FATfetch status on your Discord profile automatically?\n\n";
+        std::cout << "Enable Discord RPC autostart? [Y/n]: ";
+    }
+
+    std::string addRpc;
+    std::getline(std::cin, addRpc);
+    bool enableRpc = (addRpc.empty() || addRpc == "t" || addRpc == "T" || addRpc == "y" || addRpc == "Y" || addRpc == "tak" || addRpc == "yes");
+
     if (!fs::exists("./fatfetch")) {
-        system("make fatfetch >/dev/null 2>&1");
+        system("make all >/dev/null 2>&1");
     }
 
     // 🏃💨 RUN 7-SECOND ULTRA DETAILED BELLY JIGGLE MARATHON ANIMATION!
@@ -596,12 +617,16 @@ int main(int argc, char* argv[]) {
         fs::copy_file("./fatjump", userLocalBin + "/fatjump", fs::copy_options::overwrite_existing, ec);
         chmod((userLocalBin + "/fatjump").c_str(), 0755);
     }
+    if (fs::exists("./fatrpc")) {
+        fs::copy_file("./fatrpc", userLocalBin + "/fatrpc", fs::copy_options::overwrite_existing, ec);
+        chmod((userLocalBin + "/fatrpc").c_str(), 0755);
+    }
 
     std::string targetPath = userLocalBin + "/fatfetch";
     if (installDir == "/usr/local/bin") {
         targetPath = installDir + "/fatfetch";
         if (requiresSudo) {
-            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch ./fatjump " + installDir + "/ && sudo chmod 755 " + installDir + "/fatfetch " + installDir + "/fatjump 2>/dev/null || true";
+            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch ./fatjump ./fatrpc " + installDir + "/ && sudo chmod 755 " + installDir + "/fatfetch " + installDir + "/fatjump " + installDir + "/fatrpc 2>/dev/null || true";
             system(cmd.c_str());
         } else {
             fs::create_directories(installDir, ec);
@@ -611,13 +636,21 @@ int main(int argc, char* argv[]) {
                 fs::copy_file("./fatjump", installDir + "/fatjump", fs::copy_options::overwrite_existing, ec);
                 chmod((installDir + "/fatjump").c_str(), 0755);
             }
+            if (fs::exists("./fatrpc")) {
+                fs::copy_file("./fatrpc", installDir + "/fatrpc", fs::copy_options::overwrite_existing, ec);
+                chmod((installDir + "/fatrpc").c_str(), 0755);
+            }
         }
     }
 
+    if (enableRpc) {
+        DiscordRPC::enableAutostart();
+    }
+
     if (lang == Language::PL) {
-        std::cout << "\n\033[1;32m✔ Zainstalowano najnowsze binarki (fatfetch, fatjump) w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Zainstalowano binarki (fatfetch, fatjump, fatrpc) w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "\033[0m\n";
     } else {
-        std::cout << "\n\033[1;32m✔ Installed latest binaries (fatfetch, fatjump) to: \033[1;37m" << targetPath << " and " << userLocalBin << "\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Installed binaries (fatfetch, fatjump, fatrpc) to: \033[1;37m" << targetPath << " and " << userLocalBin << "\033[0m\n";
     }
 
     configureShellIntegration(homeDir, targetPath, autoStart, lang);

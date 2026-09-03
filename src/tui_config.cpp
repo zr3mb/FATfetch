@@ -3,6 +3,7 @@
 #include "ascii_art.hpp"
 #include "display.hpp"
 #include "sysinfo.hpp"
+#include "discord_rpc.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -49,12 +50,13 @@ void TuiConfigurator::run() {
         std::cout << C_CYN
                   << "╔════════════════════════════════════════════════════════════════════════════════╗\n"
                   << "║              FATfetch - INTERAKTYWNY GRAFICZNY KONFIGURATOR TUI                ║\n"
-                  << "║         Dostosuj grubego femboya, kolory LGBT/Hyfetch i ustawienia             ║\n"
+                  << "║         Dostosuj grubego femboya, kolory LGBT/Hyfetch i Discord RPC            ║\n"
                   << "╚════════════════════════════════════════════════════════════════════════════════╝\n"
                   << C_RST << "\n";
 
         Palette currentPal = PaletteManager::getPalette(palettes[paletteIndex]);
         std::string palPreview = PaletteManager::getPreview(currentPal);
+        bool rpcEnabled = DiscordRPC::isAutostartEnabled();
 
         std::cout << C_YEL << "[ AKTUALNA KONFIGURACJA / LIVE PREVIEW ]" << C_RST << "\n";
         std::cout << " 📁 Plik: " << C_WHT << ConfigManager::getConfigPath() << C_RST << "\n\n";
@@ -65,12 +67,13 @@ void TuiConfigurator::run() {
         std::cout << "  3) Język / Language:  " << C_WHT << "[" << (cfg.lang == Language::PL ? "Polski 🇵🇱" : "English 🇺🇸") << "]" << C_RST << "  (Naciśnij 3)\n";
         std::cout << "  4) Losowy żart:       " << (cfg.showJoke ? C_GRN + "[WŁĄCZONY]" : "\033[1;31m[WYŁĄCZONY]") << C_RST << "  (Naciśnij 4)\n";
         std::cout << "  5) Tabela diety:      " << (cfg.showDiet ? C_GRN + "[WŁĄCZONA]" : "\033[1;31m[WYŁĄCZONA]") << C_RST << "  (Naciśnij 5)\n";
-        std::cout << "  6) Kolorowe klocki:   " << (cfg.colorBlocks ? C_GRN + "[WŁĄCZONE]" : "\033[1;31m[WYŁĄCZONE]") << C_RST << "  (Naciśnij 6)\n\n";
+        std::cout << "  6) Kolorowe klocki:   " << (cfg.colorBlocks ? C_GRN + "[WŁĄCZONE]" : "\033[1;31m[WYŁĄCZONE]") << C_RST << "  (Naciśnij 6)\n";
+        std::cout << "  7) Discord RPC:       " << (rpcEnabled ? C_GRN + "[AUTOSTART AKTYWNY]" : "\033[1;31m[WYŁĄCZONY]") << C_RST << "  (Naciśnij 7, aby przełączyć)\n\n";
 
         std::cout << " ────────────────────────────────────────────────────────────────────────────────\n";
-        std::cout << "  7) " << C_GRN << "💾 ZAPISZ I ZASTOSUJ USTAWIENIA" << C_RST << "\n";
-        std::cout << "  8) " << C_CYN << "🚀 PODGLĄD NA ŻYWO (Uruchom FATfetch)" << C_RST << "\n";
-        std::cout << "  9) " << C_WHT << "❌ Wyjdź bez zapisywania" << C_RST << "\n";
+        std::cout << "  8) " << C_GRN << "💾 ZAPISZ I ZASTOSUJ USTAWIENIA" << C_RST << "\n";
+        std::cout << "  9) " << C_CYN << "🚀 PODGLĄD NA ŻYWO (Uruchom FATfetch)" << C_RST << "\n";
+        std::cout << "  0) " << C_WHT << "❌ Wyjdź bez zapisywania" << C_RST << "\n";
         std::cout << " ────────────────────────────────────────────────────────────────────────────────\n\n";
 
         // Mini preview of the selected logo
@@ -84,7 +87,7 @@ void TuiConfigurator::run() {
             std::cout << "  ...\n";
         }
 
-        std::cout << "\n" << C_WHT << "Wybierz opcję [1-9]: " << C_RST;
+        std::cout << "\n" << C_WHT << "Wybierz opcję [0-9]: " << C_RST;
         std::string input;
         std::getline(std::cin, input);
 
@@ -102,7 +105,13 @@ void TuiConfigurator::run() {
             cfg.showDiet = !cfg.showDiet;
         } else if (input == "6") {
             cfg.colorBlocks = !cfg.colorBlocks;
-        } else if (input == "7" || input == "s" || input == "S" || input == "zapisz") {
+        } else if (input == "7") {
+            if (DiscordRPC::isAutostartEnabled()) {
+                DiscordRPC::disableAutostart();
+            } else {
+                DiscordRPC::enableAutostart();
+            }
+        } else if (input == "8" || input == "s" || input == "S" || input == "zapisz") {
             cfg.logo = logos[logoIndex];
             cfg.palette = palettes[paletteIndex];
             if (ConfigManager::saveConfig(cfg)) {
@@ -111,7 +120,7 @@ void TuiConfigurator::run() {
                 sleep(1);
             }
             break;
-        } else if (input == "8" || input == "r" || input == "R") {
+        } else if (input == "9" || input == "r" || input == "R") {
             clearScreen();
             DisplayConfig disp;
             disp.logoName = logos[logoIndex];
@@ -128,7 +137,7 @@ void TuiConfigurator::run() {
             std::cout << "\n\033[1;33mNaciśnij [ENTER], aby wrócić do konfiguratora...\033[0m";
             std::string d;
             std::getline(std::cin, d);
-        } else if (input == "9" || input == "q" || input == "Q" || input == "exit") {
+        } else if (input == "0" || input == "q" || input == "Q" || input == "exit") {
             break;
         }
     }

@@ -10,9 +10,13 @@ namespace FATfetch {
 
 void DisplayManager::printHelp(Language lang) {
     std::cout << LocaleManager::getHelpText(lang);
-    std::cout << "\n\033[1;35mKONFIGURACJA, PALETY I WIDŻETY:\033[0m\n"
+    std::cout << "\n\033[1;35mKONFIGURACJA, PALETY, WIDŻETY I DISCORD RPC:\033[0m\n"
               << "  -c, --config          Uruchom interaktywny graficzny konfigurator TUI\n"
               << "  --jump                Uruchom widżet 'fatjump' (grubas skaczący w zwolnionym tempie)\n"
+              << "  --rpc                 Uruchom Discord Rich Presence w trybie podglądu na żywo\n"
+              << "  --rpc-enable          Włącz autostart demona Discord RPC przy starcie systemu\n"
+              << "  --rpc-disable         Wyłącz autostart Discord RPC\n"
+              << "  --rpc-status          Sprawdź status demona Discord RPC i połączenia\n"
               << "  -p, --palette <nazwa> Wybierz paletę kolorów: femboy, trans, rainbow, bi, pan, nonbinary, lesbian, catppuccin, dracula\n"
               << "  --list-palettes       Wyświetl listę dostępnych palet i motywów kolorystycznych\n"
               << "  --list-logos          Wyświetl listę dostępnych postaci i logotypów ASCII\n\n";

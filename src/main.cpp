@@ -6,6 +6,7 @@
 #include "config.hpp"
 #include "tui_config.hpp"
 #include "fatjump.hpp"
+#include "discord_rpc.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -31,6 +32,23 @@ int main(int argc, char* argv[]) {
             return 0;
         } else if (arg == "--jump" || arg == "jump") {
             FATfetch::FatJump::run(config.paletteName, config.logoName);
+            return 0;
+        } else if (arg == "--rpc" || arg == "rpc") {
+            FATfetch::DiscordRPC::runDaemon(true);
+            return 0;
+        } else if (arg == "--rpc-daemon") {
+            FATfetch::DiscordRPC::runDaemon(false);
+            return 0;
+        } else if (arg == "--rpc-enable") {
+            FATfetch::DiscordRPC::enableAutostart();
+            std::cout << "\033[1;32m✔ Pomyślnie włączono autostart Discord Rich Presence!\033[0m\n";
+            return 0;
+        } else if (arg == "--rpc-disable") {
+            FATfetch::DiscordRPC::disableAutostart();
+            std::cout << "\033[1;33m✔ Wyłączono autostart Discord Rich Presence.\033[0m\n";
+            return 0;
+        } else if (arg == "--rpc-status") {
+            FATfetch::DiscordRPC::printStatus();
             return 0;
         } else if (arg == "-h" || arg == "--help") {
             FATfetch::DisplayManager::printHelp(config.lang);

@@ -55,14 +55,18 @@ if [[ "$LANG_CHOICE" == "2" || "$LANG_CHOICE" == "en" || "$LANG_CHOICE" == "EN" 
     echo ""
     read -rp "Select identity [1-4] (1): " PERSONA_CHOICE
 
-    echo -e "\n\033[1;33m[ STEP 2/2: INSTALLATION TARGET ]\033[0m\n"
+    echo -e "\n\033[1;33m[ STEP 2/3: INSTALLATION TARGET ]\033[0m\n"
     echo "  1) /usr/local/bin/fatfetch (System-wide - Recommended)"
     echo "  2) ~/.local/bin/fatfetch   (User-only)"
     echo ""
     read -rp "Select option [1-2] (1): " TARGET_CHOICE
+
+    echo -e "\n\033[1;33m[ STEP 3/3: DISCORD RICH PRESENCE (RPC) ]\033[0m\n"
+    echo "  Enable Discord RPC daemon autostart on system boot? [Y/n]"
+    read -rp "Enable Discord RPC? [Y/n] (y): " RPC_CHOICE
 else
     LANG="pl"
-    echo -e "\n\033[1;33m[ KROK 1/2: KIM CHCESZ BYĆ W FATfetch? ]\033[0m\n"
+    echo -e "\n\033[1;33m[ KROK 1/3: KIM CHCESZ BYĆ W FATfetch? ]\033[0m\n"
     echo "  1) 🦣 Arch Chad Grubas (Domyślny)"
     echo "  2) 🌸 300kg Gruby Femboy (Zakolanówki + Paleta Femboy)"
     echo "  3) 🏳️‍⚧️ Trans Pride Femboy"
@@ -70,11 +74,15 @@ else
     echo ""
     read -rp "Wybierz tożsamość [1-4] (1): " PERSONA_CHOICE
 
-    echo -e "\n\033[1;33m[ KROK 2/2: LOKALIZACJA INSTALACJI ]\033[0m\n"
+    echo -e "\n\033[1;33m[ KROK 2/3: LOKALIZACJA INSTALACJI ]\033[0m\n"
     echo "  1) /usr/local/bin/fatfetch (Dla całego systemu - ZALECANE)"
     echo "  2) ~/.local/bin/fatfetch   (Dla użytkownika)"
     echo ""
     read -rp "Wybierz opcję [1-2] (1): " TARGET_CHOICE
+
+    echo -e "\n\033[1;33m[ KROK 3/3: DISCORD RICH PRESENCE (RPC) ]\033[0m\n"
+    echo "  Czy chcesz włączyć demona Discord RPC w autostarcie systemu?"
+    read -rp "Włączyć Discord RPC w autostarcie? [T/n] (t): " RPC_CHOICE
 fi
 
 LOGO="archguy"
@@ -266,18 +274,24 @@ printf "\033[?25h"
 mkdir -p "$HOME/.local/bin"
 cp -f ./fatfetch "$HOME/.local/bin/fatfetch" 2>/dev/null || true
 cp -f ./fatjump "$HOME/.local/bin/fatjump" 2>/dev/null || true
-chmod 755 "$HOME/.local/bin/fatfetch" "$HOME/.local/bin/fatjump" 2>/dev/null || true
+cp -f ./fatrpc "$HOME/.local/bin/fatrpc" 2>/dev/null || true
+chmod 755 "$HOME/.local/bin/fatfetch" "$HOME/.local/bin/fatjump" "$HOME/.local/bin/fatrpc" 2>/dev/null || true
 
 if [[ "$TARGET_CHOICE" == "1" ]]; then
     if [[ $EUID -ne 0 ]]; then
         sudo mkdir -p /usr/local/bin 2>/dev/null || true
-        sudo cp -f ./fatfetch ./fatjump /usr/local/bin/ 2>/dev/null || true
-        sudo chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump 2>/dev/null || true
+        sudo cp -f ./fatfetch ./fatjump ./fatrpc /usr/local/bin/ 2>/dev/null || true
+        sudo chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc 2>/dev/null || true
     else
         mkdir -p /usr/local/bin
-        cp -f ./fatfetch ./fatjump /usr/local/bin/
-        chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump
+        cp -f ./fatfetch ./fatjump ./fatrpc /usr/local/bin/
+        chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc
     fi
+fi
+
+# Discord RPC autostart setup
+if [[ "$RPC_CHOICE" == "" || "$RPC_CHOICE" == "t" || "$RPC_CHOICE" == "T" || "$RPC_CHOICE" == "y" || "$RPC_CHOICE" == "Y" || "$RPC_CHOICE" == "tak" || "$RPC_CHOICE" == "yes" ]]; then
+    "$HOME/.local/bin/fatfetch" --rpc-enable >/dev/null 2>&1 || true
 fi
 
 # Ensure PATH in rc files
@@ -291,6 +305,9 @@ for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
         fi
         if ! grep -q "alias fatjump=" "$rc"; then
             echo -e 'alias fatjump="$HOME/.local/bin/fatjump"' >> "$rc"
+        fi
+        if ! grep -q "alias fatrpc=" "$rc"; then
+            echo -e 'alias fatrpc="$HOME/.local/bin/fatrpc"' >> "$rc"
         fi
     fi
 done
