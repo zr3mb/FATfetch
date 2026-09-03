@@ -7,6 +7,7 @@
 #include "tui_config.hpp"
 #include "fatjump.hpp"
 #include "discord_rpc.hpp"
+#include "fatgotchi.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -29,6 +30,9 @@ int main(int argc, char* argv[]) {
         std::string arg = argv[i];
         if (arg == "-c" || arg == "--config" || arg == "config") {
             FATfetch::TuiConfigurator::run();
+            return 0;
+        } else if (arg == "--game" || arg == "game" || arg == "--gotchi" || arg == "gotchi") {
+            FATfetch::FatgotchiGame::run();
             return 0;
         } else if (arg == "--jump" || arg == "jump") {
             FATfetch::FatJump::run(config.paletteName, config.logoName);

@@ -621,12 +621,16 @@ int main(int argc, char* argv[]) {
         fs::copy_file("./fatrpc", userLocalBin + "/fatrpc", fs::copy_options::overwrite_existing, ec);
         chmod((userLocalBin + "/fatrpc").c_str(), 0755);
     }
+    if (fs::exists("./fatgotchi")) {
+        fs::copy_file("./fatgotchi", userLocalBin + "/fatgotchi", fs::copy_options::overwrite_existing, ec);
+        chmod((userLocalBin + "/fatgotchi").c_str(), 0755);
+    }
 
     std::string targetPath = userLocalBin + "/fatfetch";
     if (installDir == "/usr/local/bin") {
         targetPath = installDir + "/fatfetch";
         if (requiresSudo) {
-            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch ./fatjump ./fatrpc " + installDir + "/ && sudo chmod 755 " + installDir + "/fatfetch " + installDir + "/fatjump " + installDir + "/fatrpc 2>/dev/null || true";
+            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi " + installDir + "/ && sudo chmod 755 " + installDir + "/fatfetch " + installDir + "/fatjump " + installDir + "/fatrpc " + installDir + "/fatgotchi 2>/dev/null || true";
             system(cmd.c_str());
         } else {
             fs::create_directories(installDir, ec);
@@ -640,6 +644,10 @@ int main(int argc, char* argv[]) {
                 fs::copy_file("./fatrpc", installDir + "/fatrpc", fs::copy_options::overwrite_existing, ec);
                 chmod((installDir + "/fatrpc").c_str(), 0755);
             }
+            if (fs::exists("./fatgotchi")) {
+                fs::copy_file("./fatgotchi", installDir + "/fatgotchi", fs::copy_options::overwrite_existing, ec);
+                chmod((installDir + "/fatgotchi").c_str(), 0755);
+            }
         }
     }
 
@@ -648,9 +656,9 @@ int main(int argc, char* argv[]) {
     }
 
     if (lang == Language::PL) {
-        std::cout << "\n\033[1;32m✔ Zainstalowano binarki (fatfetch, fatjump, fatrpc) w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Zainstalowano binarki (fatfetch, fatjump, fatrpc, fatgotchi) w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "\033[0m\n";
     } else {
-        std::cout << "\n\033[1;32m✔ Installed binaries (fatfetch, fatjump, fatrpc) to: \033[1;37m" << targetPath << " and " << userLocalBin << "\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Installed binaries (fatfetch, fatjump, fatrpc, fatgotchi) to: \033[1;37m" << targetPath << " and " << userLocalBin << "\033[0m\n";
     }
 
     configureShellIntegration(homeDir, targetPath, autoStart, lang);

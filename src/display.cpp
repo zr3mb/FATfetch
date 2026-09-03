@@ -10,8 +10,9 @@ namespace FATfetch {
 
 void DisplayManager::printHelp(Language lang) {
     std::cout << LocaleManager::getHelpText(lang);
-    std::cout << "\n\033[1;35mKONFIGURACJA, PALETY, WIDŻETY I DISCORD RPC:\033[0m\n"
+    std::cout << "\n\033[1;35mKONFIGURACJA, GRY, WIDŻETY I DISCORD RPC:\033[0m\n"
               << "  -c, --config          Uruchom interaktywny graficzny konfigurator TUI\n"
+              << "  --game                Uruchom grę 'fatgotchi' (karm burgerami, nawadniaj Monsterem!)\n"
               << "  --jump                Uruchom widżet 'fatjump' (grubas skaczący w zwolnionym tempie)\n"
               << "  --rpc                 Uruchom Discord Rich Presence w trybie podglądu na żywo\n"
               << "  --rpc-enable          Włącz autostart demona Discord RPC przy starcie systemu\n"

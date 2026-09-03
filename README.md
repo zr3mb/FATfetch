@@ -47,7 +47,22 @@ cd FATfetch
 
 ---
 
-## 🕹️ Konfigurator TUI & Komendy
+## 🕹️ Konfigurator TUI & Gry i Komendy
+
+### 🎮 Nowa Gra: `fatgotchi` (Tamagotchi z Arch Chadem):
+Karm grubasa burgerami 6XL i pierogami oraz nawadniaj Monsterem Ultra White w czasie rzeczywistym! Uważaj: jeśli schudnie – przegrywasz, ale jeśli przekarmisz burgerami – **bebech pęknie i zaleje klawiaturę sosem czosnkowym**!
+```bash
+fatgotchi
+# lub: fatfetch --game
+```
+**Sterowanie w grze:**
+- `[1]` / `[b]` – 🍔 Karm Burgerem 6XL (+12% Tłuszczu)
+- `[2]` / `[m]` – 🥫 Puszka Monstera Ultra White (+15% Nawodnienia)
+- `[3]` / `[p]` – 🥟 Talerz Pierogów ze skwarkami (+20% Tłuszczu)
+- `[4]` / `[k]` – 💻 Kompiluj jądro i Chromium z AUR (+150 pkt, -14% Tłuszczu)
+- `[q]` – Wyjście z gry
+
+---
 
 ### 🎮 Discord Rich Presence (`fatrpc` / `fatfetch --rpc`):
 Wyświetla na Twoim profilu Discordzie status z wybraną postacią (Arch Chad, Gruby Femboy, Discord Mod) oraz statystykami:
