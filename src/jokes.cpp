@@ -1,6 +1,7 @@
 #include "jokes.hpp"
 #include <random>
 #include <chrono>
+#include <unistd.h>
 
 namespace FATfetch {
 
@@ -79,16 +80,93 @@ static const std::vector<std::string> ROASTS_EN = {
     "Arch will adopt snap packages before you step inside a gym."
 };
 
+static const std::vector<std::string> BELLY_COMMENTS_PL = {
+    "350 kg czystego majestatu – służy jako ergonomiczna podstawka pod klawiaturę mechaniczną.",
+    "Własne pole grawitacyjne: puste puszki po Monsterku krążą wokół pępka po orbicie geostacjonarnej.",
+    "Pojemność: 4 kebaby z sosem mieszanym, 2 zgrzewki Monstera i 450 nieoczyszczonych pakietów z AUR.",
+    "Zarejestrowany w urzędzie gminy jako budynek wielorodzinny o konstrukcji żelbetowo-tłuszczowej.",
+    "Falowanie tłuszczu przy kichnięciu rejestrują stacje sejsmologiczne w Poczdamie (4.8 w skali Richtera).",
+    "Rozmiar koszulki: Arch BTW XXXXXXL (szyta na zamówienie z plandeki od Żuka).",
+    "Ciśnienie w bębnie: 8.5 bara. Jeden błąd w `pacman -Syu` i dochodzi do kontrolowanej eksplozji.",
+    "Status bebecha: Wygiął metalowe podłokietniki w fotelu gamingowym pod kątem 45 stopni.",
+    "Strefa bezwzględnego zakazu mydła i wody (certyfikat IP00 – totalny brak odporności na higienę).",
+    "Rezonans akustyczny: bas z wentylatorów chłodzenia odbija się od brzucha dając dźwięk przestrzenny 7.1.",
+    "Współczynnik oporu powietrza: Cx = 2.8 (aerodynamika lodówki polar z lat 80).",
+    "Przy każdym kroku generuje falę uderzeniową wyłączającą sąsiadom Wi-Fi w promieniu 50 metrów.",
+    "Podczas kompilacji jądra służy jako pasywny radiator termiczny odprowadzający 300W ciepła.",
+    "Gdy kładziesz się na plecach, bebech całkowicie zasłania zakrzywiony monitor 34 cale ultrawide.",
+    "Oficjalny sponsor: Kebab u Prawdziwego Turka i hurtownia energetyków bez cukru.",
+    "Wskaźnik BMI: Wartość przekroczyła zakres 64-bitowej liczby całkowitej (integer overflow).",
+    "Amortyzacja: Przeżył upadek z fotela obrotowego dzięki 18-centymetrowej warstwie ochronnego sadła.",
+    "Lokalna strefa mikroklimatu: Wokół pępka panuje podwyższona wilgotność i naturalny aromat kebabu.",
+    "Zastępuje biurko z regulacją wysokości – myszka i klawiatura mieszczą się na szczycie bębna.",
+    "Certyfikat energetyczny: Klasa G+ (generuje tyle ciepła, że kot śpi na nim całą zimę).",
+    "Grubość pancerza: 250mm stali pancernej z domieszką tłuszczów trans (odporny na pociski kumulacyjne).",
+    "Status szwów w dresach: Stan krytyczny, naciąg na poziomie 99.8% wytrzymałości materiału.",
+    "Zamiast kaloryfera masz potężny piec hutniczy zasilany pizzą i Monsterem Mango Loco.",
+    "Poduszka powietrzna w aucie została zdemontowana, bo bebech wypełnia całą przestrzeń kabiny.",
+    "W pasie ma więcej centymetrów niż Twój monitor gamingowy ma częstotliwości odświeżania w Hz.",
+    "Gęstość materii w bębnie powoli zbliża się do gęstości gwiazdy neutronowej.",
+    "Gdy zbliżasz się do lodówki, drzwi same się otwierają pod wpływem przyciągania masy tłuszczowej.",
+    "Odgłos uderzenia dłonią w bęben: Dźwięk wielkiego bębna orkiestrowego niosący się po klatce schodowej.",
+    "Zdolności pływackie: Bezwzględna niezatapialność – wyporność 380 litrów tłuszczu gwarantuje status boi morskiej.",
+    "W trybie awaryjnym mieści zapasy kebabów wystarczające na przetrwanie 3 tygodni awarii internetu.",
+    "Środek ciężkości znajduje się 40 centymetrów przed kolanami.",
+    "Brak widoczności stóp od 2019 roku (stopy uznane za nieistotny bloat)."
+};
+
+static const std::vector<std::string> BELLY_COMMENTS_EN = {
+    "350 kg of pure majesty – doubles as an ergonomic mechanical keyboard wrist rest.",
+    "Has its own gravitational pull: empty Monster cans orbit the belly button in geostationary orbit.",
+    "Storage capacity: 4 XL garlic kebabs, 2 cases of Monster Ultra, and 450 uncleaned AUR packages.",
+    "Registered with local zoning authorities as a multi-family reinforced fat structure.",
+    "Sneezing creates a seismic shockwave registered in Potsdam at 4.8 on the Richter scale.",
+    "Shirt size: Arch BTW XXXXXXL (custom tailored from military surplus truck tarp).",
+    "Internal pressure: 8.5 bar. One failed `pacman -Syu` away from controlled implosion.",
+    "Status: Permanently bent the steel armrests of the gaming chair at a 45-degree angle.",
+    "Certified IP00: Zero resistance to showers, maximum resistance to outdoor grass.",
+    "Acoustic resonance: PC fan noise bounces off the belly producing natural 7.1 surround sound.",
+    "Aerodynamic drag coefficient: Cx = 2.8 (aerodynamics of a 1980s Soviet refrigerator).",
+    "Each step generates a kinetic tremor that knocks neighbor's 5GHz Wi-Fi offline.",
+    "Acts as a massive passive thermal heatsink dissipating 300W during kernel compilation.",
+    "Laying on your back completely blocks the line of sight to a 34-inch ultrawide monitor.",
+    "Official sponsors: Local 24/7 Döner Kebab and wholesale energy drink distributors.",
+    "BMI calculation resulted in an unsigned 64-bit integer overflow.",
+    "Impact defense: Survived falling out of chair thanks to 7 inches of protective fat shielding.",
+    "Microclimate warning: Localized high humidity and kebab scent detected near the navel.",
+    "Replaces standing desks: Mouse and 60% keyboard easily sit atop the upper belly shelf.",
+    "Thermal rating: Generates enough radiant heat that the cat sleeps on it all winter.",
+    "Armor thickness: 250mm equivalent rolled homogenous fat armor.",
+    "Sweatpant seams status: Critical structural stress, fabric tension at 99.8% yield limit.",
+    "Car airbags removed: The belly already occupies all available cockpit volume.",
+    "Waist circumference in centimeters exceeds your monitor refresh rate in Hz.",
+    "Matter density in the belly core is rapidly approaching neutron star levels.",
+    "Feet have not been observed visually since 2019 (feet declared deprecated bloat)."
+};
+
+static std::mt19937& getRng() {
+    static std::random_device rd;
+    static std::mt19937 rng(rd() ^ static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count() + getpid()));
+    return rng;
+}
+
 std::string JokeGenerator::getRandomJoke(Language lang) {
-    static std::mt19937 rng(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+    auto& rng = getRng();
     const auto& list = (lang == Language::PL) ? JOKES_PL : JOKES_EN;
     std::uniform_int_distribution<size_t> dist(0, list.size() - 1);
     return list[dist(rng)];
 }
 
 std::string JokeGenerator::getRandomRoast(Language lang) {
-    static std::mt19937 rng(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+    auto& rng = getRng();
     const auto& list = (lang == Language::PL) ? ROASTS_PL : ROASTS_EN;
+    std::uniform_int_distribution<size_t> dist(0, list.size() - 1);
+    return list[dist(rng)];
+}
+
+std::string JokeGenerator::getRandomBellyComment(Language lang) {
+    auto& rng = getRng();
+    const auto& list = (lang == Language::PL) ? BELLY_COMMENTS_PL : BELLY_COMMENTS_EN;
     std::uniform_int_distribution<size_t> dist(0, list.size() - 1);
     return list[dist(rng)];
 }
