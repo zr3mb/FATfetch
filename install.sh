@@ -56,7 +56,7 @@ if [[ "$LANG_CHOICE" == "2" || "$LANG_CHOICE" == "en" || "$LANG_CHOICE" == "EN" 
     read -rp "Select identity [1-4] (1): " PERSONA_CHOICE
 
     echo -e "\n\033[1;33m[ STEP 2/4: BLOAT CONTROL - CHOOSE WHAT TO INSTALL ]\033[0m\n"
-    echo "  1) 🏰 Full Bloat 350kg Edition (Install all: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)"
+    echo "  1) 🏰 Full Bloat 350kg Edition (Install all: fatfetch, fatjump, fatgotchi, fatrain, fatfight, fatrpc)"
     echo "  2) 🪶 Pure Arch Minimalist     (Only core fatfetch - strip all games, widgets and daemons)"
     echo "  3) ⚙️  Custom Arch DIY          (Choose module by module what to install / reject)"
     echo ""
@@ -65,12 +65,14 @@ if [[ "$LANG_CHOICE" == "2" || "$LANG_CHOICE" == "en" || "$LANG_CHOICE" == "EN" 
     INSTALL_JUMP=1
     INSTALL_GOTCHI=1
     INSTALL_RAIN=1
+    INSTALL_FIGHT=1
     INSTALL_RPC=1
 
     if [[ "$BLOAT_CHOICE" == "2" ]]; then
         INSTALL_JUMP=0
         INSTALL_GOTCHI=0
         INSTALL_RAIN=0
+        INSTALL_FIGHT=0
         INSTALL_RPC=0
     elif [[ "$BLOAT_CHOICE" == "3" ]]; then
         echo ""
@@ -82,6 +84,9 @@ if [[ "$LANG_CHOICE" == "2" || "$LANG_CHOICE" == "en" || "$LANG_CHOICE" == "EN" 
 
         read -rp "  -> Install fatrain (burger rain game & screensaver)? [Y/n]: " ASK_RAIN
         [[ "$ASK_RAIN" == "n" || "$ASK_RAIN" == "N" ]] && INSTALL_RAIN=0
+
+        read -rp "  -> Install fatfight (turn-based RPG battle vs bloat demons)? [Y/n]: " ASK_FIGHT
+        [[ "$ASK_FIGHT" == "n" || "$ASK_FIGHT" == "N" ]] && INSTALL_FIGHT=0
 
         read -rp "  -> Install fatrpc (Discord Rich Presence daemon)? [Y/n]: " ASK_RPC
         [[ "$ASK_RPC" == "n" || "$ASK_RPC" == "N" ]] && INSTALL_RPC=0
@@ -110,7 +115,7 @@ else
     read -rp "Wybierz tożsamość [1-4] (1): " PERSONA_CHOICE
 
     echo -e "\n\033[1;33m[ KROK 2/4: KONTROLA BLOATU - WYBIERZ CO CHCESZ ZAINSTALOWAĆ ]\033[0m\n"
-    echo "  1) 🏰 Full Bloat 350kg Edition (Instaluj wszystko: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)"
+    echo "  1) 🏰 Full Bloat 350kg Edition (Instaluj wszystko: fatfetch, fatjump, fatgotchi, fatrain, fatfight, fatrpc)"
     echo "  2) 🪶 Pure Arch Minimalist     (Tylko czysty fatfetch - wyjeb wszystkie gry, widżety i daemony)"
     echo "  3) ⚙️  Custom Arch DIY          (Ręczny wybór: sam decydujesz co instalujesz, a co wywalasz)"
     echo ""
@@ -119,12 +124,14 @@ else
     INSTALL_JUMP=1
     INSTALL_GOTCHI=1
     INSTALL_RAIN=1
+    INSTALL_FIGHT=1
     INSTALL_RPC=1
 
     if [[ "$BLOAT_CHOICE" == "2" ]]; then
         INSTALL_JUMP=0
         INSTALL_GOTCHI=0
         INSTALL_RAIN=0
+        INSTALL_FIGHT=0
         INSTALL_RPC=0
     elif [[ "$BLOAT_CHOICE" == "3" ]]; then
         echo ""
@@ -136,6 +143,9 @@ else
 
         read -rp "  -> Zainstalować fatrain (deszcz burgerów i wygaszacz terminala)? [T/n]: " ASK_RAIN
         [[ "$ASK_RAIN" == "n" || "$ASK_RAIN" == "N" ]] && INSTALL_RAIN=0
+
+        read -rp "  -> Zainstalować fatfight (turowa walka RPG z demonami bloatu)? [T/n]: " ASK_FIGHT
+        [[ "$ASK_FIGHT" == "n" || "$ASK_FIGHT" == "N" ]] && INSTALL_FIGHT=0
 
         read -rp "  -> Zainstalować fatrpc (Discord Rich Presence daemon)? [T/n]: " ASK_RPC
         [[ "$ASK_RPC" == "n" || "$ASK_RPC" == "N" ]] && INSTALL_RPC=0
@@ -342,6 +352,7 @@ COMPILE_TARGETS="fatfetch"
 [[ $INSTALL_JUMP -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatjump"
 [[ $INSTALL_GOTCHI -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatgotchi"
 [[ $INSTALL_RAIN -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatrain"
+[[ $INSTALL_FIGHT -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatfight"
 [[ $INSTALL_RPC -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatrpc"
 
 make $COMPILE_TARGETS >/dev/null 2>&1 &
@@ -377,6 +388,11 @@ if [[ $INSTALL_RAIN -eq 1 ]]; then
     cp -f ./fatrain "$HOME/.local/bin/fatrain" 2>/dev/null || true
     chmod 755 "$HOME/.local/bin/fatrain" 2>/dev/null || true
     CP_LIST="$CP_LIST ./fatrain"
+fi
+if [[ $INSTALL_FIGHT -eq 1 ]]; then
+    cp -f ./fatfight "$HOME/.local/bin/fatfight" 2>/dev/null || true
+    chmod 755 "$HOME/.local/bin/fatfight" 2>/dev/null || true
+    CP_LIST="$CP_LIST ./fatfight"
 fi
 
 if [[ "$TARGET_CHOICE" == "1" ]]; then
@@ -419,6 +435,9 @@ for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
         if [[ $INSTALL_RAIN -eq 1 ]] && ! grep -q "alias fatrain=" "$rc"; then
             echo -e 'alias fatrain="$HOME/.local/bin/fatrain"' >> "$rc"
         fi
+        if [[ $INSTALL_FIGHT -eq 1 ]] && ! grep -q "alias fatfight=" "$rc"; then
+            echo -e 'alias fatfight="$HOME/.local/bin/fatfight"' >> "$rc"
+        fi
     fi
 done
 
@@ -427,6 +446,7 @@ REJECTED_LIST=""
 [[ $INSTALL_JUMP -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatjump" || REJECTED_LIST="$REJECTED_LIST fatjump"
 [[ $INSTALL_GOTCHI -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatgotchi" || REJECTED_LIST="$REJECTED_LIST fatgotchi"
 [[ $INSTALL_RAIN -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatrain" || REJECTED_LIST="$REJECTED_LIST fatrain"
+[[ $INSTALL_FIGHT -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatfight" || REJECTED_LIST="$REJECTED_LIST fatfight"
 [[ $INSTALL_RPC -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatrpc" || REJECTED_LIST="$REJECTED_LIST fatrpc"
 
 echo -e "\n\033[1;32m"
@@ -443,6 +463,7 @@ fi
 
 echo -e "\n\033[1;33m💡 WSKAZÓWKI:\033[0m"
 echo -e "   • Główny fetch: \033[1;36mfatfetch\033[0m"
+[[ $INSTALL_FIGHT -eq 1 ]] && echo -e "   • Walka z bloatem RPG: \033[1;31mfatfight\033[0m"
 [[ $INSTALL_RAIN -eq 1 ]] && echo -e "   • Deszcz burgerów: \033[1;32mfatrain\033[0m"
 [[ $INSTALL_GOTCHI -eq 1 ]] && echo -e "   • Gra Tamagotchi: \033[1;33mfatgotchi\033[0m"
 [[ $INSTALL_JUMP -eq 1 ]] && echo -e "   • Skaczący grubas w slow-mo: \033[1;35mfatjump\033[0m"

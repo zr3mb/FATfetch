@@ -14,6 +14,7 @@ void DisplayManager::printHelp(Language lang) {
               << "  -c, --config          Uruchom interaktywny graficzny konfigurator TUI\n"
               << "  --game                Uruchom grę 'fatgotchi' (karm burgerami, nawadniaj Monsterem!)\n"
               << "  --rain                Uruchom wygaszacz/grę 'fatrain' (deszcz burgerów i Arch userzy)\n"
+              << "  --fight               Uruchom grę 'fatfight' (turowa walka RPG vs demony bloatu)\n"
               << "  --jump                Uruchom widżet 'fatjump' (grubas skaczący w zwolnionym tempie)\n"
               << "  --rpc                 Uruchom Discord Rich Presence w trybie podglądu na żywo\n"
               << "  --rpc-enable          Włącz autostart demona Discord RPC przy starcie systemu\n"

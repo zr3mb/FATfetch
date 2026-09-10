@@ -64,6 +64,29 @@ fatrain
 
 ---
 
+### ⚔️ Nowa Gra RPG: `fatfight` (Battle of the Bloat):
+Turowa walka RPG w terminalu! Jako 350kg Arch Chad stajesz do walki z demonami bloatu i reliktami systemowymi w 4 epickich etapach:
+1. **Ubuntu Snap Demon** (500MB kalkulator, telemetria Canonical, zalewanie /dev/loop)
+2. **Debian Antique Dinosaur** (Jądro 3.2 z 2011, odmowa sterowników Wi-Fi, 10-letni uptime)
+3. **Windows 11 Recall Golem** (Copilot AI robiący screeny haseł, restart o 3:00 w nocy, pop-upy Edge, BSOD)
+4. **Arch Wiki Guru (Final Boss)** (Elitista ricingowy, fala uderzeniowa RTFM, Neovim lua crash, puryzm Waylanda)
+
+```bash
+fatfight
+# lub: fatfetch --fight
+```
+
+**Umiejętności i Sterowanie w `fatfight`:**
+- `[1]` – 💥 **Bebech Slam** (Atak fizyczny 350kg masą, szansa na ogłuszenie wroga)
+- `[2]` – 🐧 **sudo pacman -Syu** (Zmiata przestarzałe pakiety, niszczy pancerz wroga)
+- `[3]` – 🥫 **Łyk Białego Monstera** (+90 HP, +35 Energii, buff +15% dmg)
+- `[4]` – ⚡ **AUR Git Compile Bomb** (100% CPU bomb, potężne obrażenia krytyczne od kompilacji)
+- `[5]` – 📢 **"I Use Arch BTW"** (Flex psychologiczny, obniża obronę o 35% i dezorientuje wroga)
+- `[6]` – 🛡️ **Turlanie Bebechem** (Pozycja obronna, 75% szansy na uniknięcie ciosu)
+- `[P]` – Zmiana palety kolorów w locie | `[Q]` – Poddanie się / Wyjście
+
+---
+
 ### 🎮 Nowa Gra: `fatgotchi` (Tamagotchi z Arch Chadem):
 Karm grubasa burgerami 6XL i pierogami oraz nawadniaj Monsterem Ultra White w czasie rzeczywistym! Uważaj: jeśli schudnie – przegrywasz, ale jeśli przekarmisz burgerami – **bebech pęknie i zaleje klawiaturę sosem czosnkowym**!
 ```bash

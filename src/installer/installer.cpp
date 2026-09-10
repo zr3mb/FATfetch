@@ -534,19 +534,20 @@ int main(int argc, char* argv[]) {
     bool installJump = true;
     bool installGotchi = true;
     bool installRain = true;
+    bool installFight = true;
     bool installRpc = true;
 
     if (lang == Language::PL) {
         std::cout << "\033[1;33m[ KROK 2/5: KONTROLA BLOATU - WYBIERZ CO CHCESZ ZAINSTALOWAĆ ]\033[0m\n";
         std::cout << "\033[1;36mJak na prawdziwego Arch Chada przystało, masz 100% kontroli nad bloatem w systemie!\033[0m\n\n";
-        std::cout << " 1) 🏰 \033[1mFull Bloat 350kg Edition\033[0m   (Instaluj wszystko: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)\n";
+        std::cout << " 1) 🏰 \033[1mFull Bloat 350kg Edition\033[0m   (Instaluj wszystko: fatfetch, fatjump, fatgotchi, fatrain, fatfight, fatrpc)\n";
         std::cout << " 2) 🪶 \033[1mPure Arch Minimalist\033[0m       (Tylko czysty fatfetch - wyjeb wszystkie gry, widżety i daemony)\n";
         std::cout << " 3) ⚙️  \033[1mCustom Arch DIY\033[0m            (Ręczny wybór: decydujesz co instalujesz, a co wywalasz)\n\n";
         std::cout << "Wybierz tryb instalacji [1-3] (domyślnie 1): ";
     } else {
         std::cout << "\033[1;33m[ STEP 2/5: BLOAT CONTROL - CHOOSE WHAT TO INSTALL ]\033[0m\n";
         std::cout << "\033[1;36mTrue to Arch Linux philosophy, you have 100% control over system bloat!\033[0m\n\n";
-        std::cout << " 1) 🏰 \033[1mFull Bloat 350kg Edition\033[0m   (Install everything: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)\n";
+        std::cout << " 1) 🏰 \033[1mFull Bloat 350kg Edition\033[0m   (Install everything: fatfetch, fatjump, fatgotchi, fatrain, fatfight, fatrpc)\n";
         std::cout << " 2) 🪶 \033[1mPure Arch Minimalist\033[0m       (Only core fatfetch - strip all games, widgets and daemons)\n";
         std::cout << " 3) ⚙️  \033[1mCustom Arch DIY\033[0m            (Manual selection: choose module by module)\n\n";
         std::cout << "Select installation mode [1-3] (default 1): ";
@@ -558,6 +559,7 @@ int main(int argc, char* argv[]) {
         installJump = false;
         installGotchi = false;
         installRain = false;
+        installFight = false;
         installRpc = false;
     } else if (bloatChoice == "3") {
         auto askModule = [&](const std::string& namePl, const std::string& nameEn) -> bool {
@@ -574,6 +576,8 @@ int main(int argc, char* argv[]) {
                                   "  -> Install fatgotchi (Tamagotchi burger feeding game)? [Y/n]: ");
         installRain = askModule("  -> Zainstalować fatrain (deszcz burgerów i wygaszacz terminala)? [T/n]: ",
                                 "  -> Install fatrain (burger rain game & screensaver)? [Y/n]: ");
+        installFight = askModule("  -> Zainstalować fatfight (turowa walka RPG z demonami bloatu)? [T/n]: ",
+                                 "  -> Install fatfight (turn-based RPG battle vs bloat demons)? [Y/n]: ");
         installRpc = askModule("  -> Zainstalować fatrpc (Discord Rich Presence daemon)? [T/n]: ",
                                "  -> Install fatrpc (Discord Rich Presence daemon)? [Y/n]: ");
     }
@@ -659,6 +663,7 @@ int main(int argc, char* argv[]) {
     if (installRpc) compileTargets += " fatrpc";
     if (installGotchi) compileTargets += " fatgotchi";
     if (installRain) compileTargets += " fatrain";
+    if (installFight) compileTargets += " fatfight";
 
     system(("make " + compileTargets + " >/dev/null 2>&1").c_str());
 
@@ -688,6 +693,10 @@ int main(int argc, char* argv[]) {
         fs::copy_file("./fatrain", userLocalBin + "/fatrain", fs::copy_options::overwrite_existing, ec);
         chmod((userLocalBin + "/fatrain").c_str(), 0755);
     }
+    if (installFight && fs::exists("./fatfight")) {
+        fs::copy_file("./fatfight", userLocalBin + "/fatfight", fs::copy_options::overwrite_existing, ec);
+        chmod((userLocalBin + "/fatfight").c_str(), 0755);
+    }
 
     std::string targetPath = userLocalBin + "/fatfetch";
     if (installDir == "/usr/local/bin") {
@@ -697,6 +706,7 @@ int main(int argc, char* argv[]) {
         if (installRpc) cpList += " ./fatrpc";
         if (installGotchi) cpList += " ./fatgotchi";
         if (installRain) cpList += " ./fatrain";
+        if (installFight) cpList += " ./fatfight";
 
         if (requiresSudo) {
             std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f " + cpList + " " + installDir + "/ && sudo chmod 755 " + installDir + "/fat* 2>/dev/null || true";
@@ -721,6 +731,10 @@ int main(int argc, char* argv[]) {
                 fs::copy_file("./fatrain", installDir + "/fatrain", fs::copy_options::overwrite_existing, ec);
                 chmod((installDir + "/fatrain").c_str(), 0755);
             }
+            if (installFight && fs::exists("./fatfight")) {
+                fs::copy_file("./fatfight", installDir + "/fatfight", fs::copy_options::overwrite_existing, ec);
+                chmod((installDir + "/fatfight").c_str(), 0755);
+            }
         }
     }
 
@@ -733,6 +747,7 @@ int main(int argc, char* argv[]) {
     if (installJump) installedModules.push_back("fatjump"); else rejectedModules.push_back("fatjump");
     if (installGotchi) installedModules.push_back("fatgotchi"); else rejectedModules.push_back("fatgotchi");
     if (installRain) installedModules.push_back("fatrain"); else rejectedModules.push_back("fatrain");
+    if (installFight) installedModules.push_back("fatfight"); else rejectedModules.push_back("fatfight");
     if (installRpc) installedModules.push_back("fatrpc"); else rejectedModules.push_back("fatrpc");
 
     std::string installedStr = "";
