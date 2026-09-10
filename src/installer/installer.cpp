@@ -528,17 +528,67 @@ int main(int argc, char* argv[]) {
 
     ConfigManager::saveConfig(initialConfig);
 
-    // KROK 2: Install Path selection
+    // KROK 2: Kontrola bloatu / Wybór pakietów
+    clearScreen();
+    printBanner(lang);
+    bool installJump = true;
+    bool installGotchi = true;
+    bool installRain = true;
+    bool installRpc = true;
+
+    if (lang == Language::PL) {
+        std::cout << "\033[1;33m[ KROK 2/5: KONTROLA BLOATU - WYBIERZ CO CHCESZ ZAINSTALOWAĆ ]\033[0m\n";
+        std::cout << "\033[1;36mJak na prawdziwego Arch Chada przystało, masz 100% kontroli nad bloatem w systemie!\033[0m\n\n";
+        std::cout << " 1) 🏰 \033[1mFull Bloat 350kg Edition\033[0m   (Instaluj wszystko: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)\n";
+        std::cout << " 2) 🪶 \033[1mPure Arch Minimalist\033[0m       (Tylko czysty fatfetch - wyjeb wszystkie gry, widżety i daemony)\n";
+        std::cout << " 3) ⚙️  \033[1mCustom Arch DIY\033[0m            (Ręczny wybór: decydujesz co instalujesz, a co wywalasz)\n\n";
+        std::cout << "Wybierz tryb instalacji [1-3] (domyślnie 1): ";
+    } else {
+        std::cout << "\033[1;33m[ STEP 2/5: BLOAT CONTROL - CHOOSE WHAT TO INSTALL ]\033[0m\n";
+        std::cout << "\033[1;36mTrue to Arch Linux philosophy, you have 100% control over system bloat!\033[0m\n\n";
+        std::cout << " 1) 🏰 \033[1mFull Bloat 350kg Edition\033[0m   (Install everything: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)\n";
+        std::cout << " 2) 🪶 \033[1mPure Arch Minimalist\033[0m       (Only core fatfetch - strip all games, widgets and daemons)\n";
+        std::cout << " 3) ⚙️  \033[1mCustom Arch DIY\033[0m            (Manual selection: choose module by module)\n\n";
+        std::cout << "Select installation mode [1-3] (default 1): ";
+    }
+
+    std::string bloatChoice;
+    std::getline(std::cin, bloatChoice);
+    if (bloatChoice == "2") {
+        installJump = false;
+        installGotchi = false;
+        installRain = false;
+        installRpc = false;
+    } else if (bloatChoice == "3") {
+        auto askModule = [&](const std::string& namePl, const std::string& nameEn) -> bool {
+            std::cout << (lang == Language::PL ? namePl : nameEn);
+            std::string ans;
+            std::getline(std::cin, ans);
+            return (ans.empty() || ans == "t" || ans == "T" || ans == "y" || ans == "Y" || ans == "tak" || ans == "yes");
+        };
+
+        std::cout << "\n";
+        installJump = askModule("  -> Zainstalować fatjump (skaczący grubas w slow-mo)? [T/n]: ",
+                                "  -> Install fatjump (slow-motion jumping chad)? [Y/n]: ");
+        installGotchi = askModule("  -> Zainstalować fatgotchi (gra Tamagotchi z karmieniem burgerami)? [T/n]: ",
+                                  "  -> Install fatgotchi (Tamagotchi burger feeding game)? [Y/n]: ");
+        installRain = askModule("  -> Zainstalować fatrain (deszcz burgerów i wygaszacz terminala)? [T/n]: ",
+                                "  -> Install fatrain (burger rain game & screensaver)? [Y/n]: ");
+        installRpc = askModule("  -> Zainstalować fatrpc (Discord Rich Presence daemon)? [T/n]: ",
+                               "  -> Install fatrpc (Discord Rich Presence daemon)? [Y/n]: ");
+    }
+
+    // KROK 3: Install Path selection
     clearScreen();
     printBanner(lang);
     if (lang == Language::PL) {
-        std::cout << "\033[1;33m[ KROK 2/3: WYBÓR LOKALIZACJI INSTALACJI ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ KROK 3/5: WYBÓR LOKALIZACJI INSTALACJI ]\033[0m\n\n";
         std::cout << " 1) \033[1;36m/usr/local/bin/fatfetch\033[0m (Dla całego systemu - ZALECANE, natychmiast w PATH)\n";
         std::cout << " 2) \033[1;36m~/.local/bin/fatfetch\033[0m   (Dla użytkownika - bez uprawnień roota)\n";
         std::cout << " 3) \033[1;36mKompilacja lokalna\033[0m      (Pozostaw tylko plik binarny w bieżącym katalogu)\n\n";
         std::cout << "Wybierz opcję [1-3] (domyślnie 1): ";
     } else {
-        std::cout << "\033[1;33m[ STEP 2/3: INSTALLATION TARGET ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ STEP 3/5: INSTALLATION TARGET ]\033[0m\n\n";
         std::cout << " 1) \033[1;36m/usr/local/bin/fatfetch\033[0m (System-wide - RECOMMENDED, globally in PATH)\n";
         std::cout << " 2) \033[1;36m~/.local/bin/fatfetch\033[0m   (User-only - NO root privileges required)\n";
         std::cout << " 3) \033[1;36mLocal build only\033[0m       (Keep compiled binary in current folder)\n\n";
@@ -562,16 +612,16 @@ int main(int argc, char* argv[]) {
         installDir = "";
     }
 
-    // KROK 3: Shell integration question
+    // KROK 4: Shell integration question
     clearScreen();
     printBanner(lang);
     if (lang == Language::PL) {
-        std::cout << "\033[1;33m[ KROK 3/4: INTEGRACJA Z POWŁOKĄ ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ KROK 4/5: INTEGRACJA Z POWŁOKĄ ]\033[0m\n\n";
         std::cout << "Czy chcesz automatycznie dodać 'fatfetch' do pliku startowego Twojej powłoki\n"
                   << "(~/.bashrc lub ~/.zshrc), aby FATfetch witał Cię przy każdym otwarciu terminala?\n\n";
         std::cout << "Dodać do autostartu terminala? [T/n]: ";
     } else {
-        std::cout << "\033[1;33m[ STEP 3/4: SHELL STARTUP INTEGRATION ]\033[0m\n\n";
+        std::cout << "\033[1;33m[ STEP 4/5: SHELL STARTUP INTEGRATION ]\033[0m\n\n";
         std::cout << "Would you like to append 'fatfetch' to your shell startup file\n"
                   << "(~/.bashrc or ~/.zshrc) to remind you of your status every time you open a terminal?\n\n";
         std::cout << "Add to shell rc? [Y/n]: ";
@@ -581,28 +631,36 @@ int main(int argc, char* argv[]) {
     std::getline(std::cin, addShell);
     bool autoStart = (addShell.empty() || addShell == "t" || addShell == "T" || addShell == "y" || addShell == "Y" || addShell == "tak" || addShell == "yes");
 
-    // KROK 4: Discord Rich Presence question
-    clearScreen();
-    printBanner(lang);
-    if (lang == Language::PL) {
-        std::cout << "\033[1;33m[ KROK 4/4: DISCORD RICH PRESENCE (RPC) ]\033[0m\n\n";
-        std::cout << "Czy chcesz włączyć w tle demona Discord Rich Presence (autostart ze statusem FATfetch\n"
-                  << "\"300kg Arch Chad - 0 dni bez prysznica\" na Twoim profilu Discord)?\n\n";
-        std::cout << "Włączyć Discord RPC w autostarcie? [T/n]: ";
-    } else {
-        std::cout << "\033[1;33m[ STEP 4/4: DISCORD RICH PRESENCE (RPC) ]\033[0m\n\n";
-        std::cout << "Would you like to enable the background Discord Rich Presence daemon on startup\n"
-                  << "to display your FATfetch status on your Discord profile automatically?\n\n";
-        std::cout << "Enable Discord RPC autostart? [Y/n]: ";
+    // KROK 5: Discord Rich Presence question (tylko jeśli wybrano fatrpc)
+    bool enableRpc = false;
+    if (installRpc) {
+        clearScreen();
+        printBanner(lang);
+        if (lang == Language::PL) {
+            std::cout << "\033[1;33m[ KROK 5/5: DISCORD RICH PRESENCE (RPC) ]\033[0m\n\n";
+            std::cout << "Czy chcesz włączyć w tle demona Discord Rich Presence (autostart ze statusem FATfetch\n"
+                      << "\"300kg Arch Chad - 0 dni bez prysznica\" na Twoim profilu Discord)?\n\n";
+            std::cout << "Włączyć Discord RPC w autostarcie? [T/n]: ";
+        } else {
+            std::cout << "\033[1;33m[ STEP 5/5: DISCORD RICH PRESENCE (RPC) ]\033[0m\n\n";
+            std::cout << "Would you like to enable the background Discord Rich Presence daemon on startup\n"
+                      << "to display your FATfetch status on your Discord profile automatically?\n\n";
+            std::cout << "Enable Discord RPC autostart? [Y/n]: ";
+        }
+
+        std::string addRpc;
+        std::getline(std::cin, addRpc);
+        enableRpc = (addRpc.empty() || addRpc == "t" || addRpc == "T" || addRpc == "y" || addRpc == "Y" || addRpc == "tak" || addRpc == "yes");
     }
 
-    std::string addRpc;
-    std::getline(std::cin, addRpc);
-    bool enableRpc = (addRpc.empty() || addRpc == "t" || addRpc == "T" || addRpc == "y" || addRpc == "Y" || addRpc == "tak" || addRpc == "yes");
+    // Dynamic Compilation based on selected modules
+    std::string compileTargets = "fatfetch";
+    if (installJump) compileTargets += " fatjump";
+    if (installRpc) compileTargets += " fatrpc";
+    if (installGotchi) compileTargets += " fatgotchi";
+    if (installRain) compileTargets += " fatrain";
 
-    if (!fs::exists("./fatfetch")) {
-        system("make all >/dev/null 2>&1");
-    }
+    system(("make " + compileTargets + " >/dev/null 2>&1").c_str());
 
     // 🏃💨 RUN 7-SECOND ULTRA DETAILED BELLY JIGGLE MARATHON ANIMATION!
     run7SecondInstallationAnimation(lang);
@@ -613,19 +671,20 @@ int main(int argc, char* argv[]) {
     fs::create_directories(userLocalBin, ec);
     fs::copy_file("./fatfetch", userLocalBin + "/fatfetch", fs::copy_options::overwrite_existing, ec);
     chmod((userLocalBin + "/fatfetch").c_str(), 0755);
-    if (fs::exists("./fatjump")) {
+
+    if (installJump && fs::exists("./fatjump")) {
         fs::copy_file("./fatjump", userLocalBin + "/fatjump", fs::copy_options::overwrite_existing, ec);
         chmod((userLocalBin + "/fatjump").c_str(), 0755);
     }
-    if (fs::exists("./fatrpc")) {
+    if (installRpc && fs::exists("./fatrpc")) {
         fs::copy_file("./fatrpc", userLocalBin + "/fatrpc", fs::copy_options::overwrite_existing, ec);
         chmod((userLocalBin + "/fatrpc").c_str(), 0755);
     }
-    if (fs::exists("./fatgotchi")) {
+    if (installGotchi && fs::exists("./fatgotchi")) {
         fs::copy_file("./fatgotchi", userLocalBin + "/fatgotchi", fs::copy_options::overwrite_existing, ec);
         chmod((userLocalBin + "/fatgotchi").c_str(), 0755);
     }
-    if (fs::exists("./fatrain")) {
+    if (installRain && fs::exists("./fatrain")) {
         fs::copy_file("./fatrain", userLocalBin + "/fatrain", fs::copy_options::overwrite_existing, ec);
         chmod((userLocalBin + "/fatrain").c_str(), 0755);
     }
@@ -633,26 +692,32 @@ int main(int argc, char* argv[]) {
     std::string targetPath = userLocalBin + "/fatfetch";
     if (installDir == "/usr/local/bin") {
         targetPath = installDir + "/fatfetch";
+        std::string cpList = "./fatfetch";
+        if (installJump) cpList += " ./fatjump";
+        if (installRpc) cpList += " ./fatrpc";
+        if (installGotchi) cpList += " ./fatgotchi";
+        if (installRain) cpList += " ./fatrain";
+
         if (requiresSudo) {
-            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi ./fatrain " + installDir + "/ && sudo chmod 755 " + installDir + "/fatfetch " + installDir + "/fatjump " + installDir + "/fatrpc " + installDir + "/fatgotchi " + installDir + "/fatrain 2>/dev/null || true";
+            std::string cmd = "sudo mkdir -p " + installDir + " && sudo cp -f " + cpList + " " + installDir + "/ && sudo chmod 755 " + installDir + "/fat* 2>/dev/null || true";
             system(cmd.c_str());
         } else {
             fs::create_directories(installDir, ec);
             fs::copy_file("./fatfetch", targetPath, fs::copy_options::overwrite_existing, ec);
             chmod(targetPath.c_str(), 0755);
-            if (fs::exists("./fatjump")) {
+            if (installJump && fs::exists("./fatjump")) {
                 fs::copy_file("./fatjump", installDir + "/fatjump", fs::copy_options::overwrite_existing, ec);
                 chmod((installDir + "/fatjump").c_str(), 0755);
             }
-            if (fs::exists("./fatrpc")) {
+            if (installRpc && fs::exists("./fatrpc")) {
                 fs::copy_file("./fatrpc", installDir + "/fatrpc", fs::copy_options::overwrite_existing, ec);
                 chmod((installDir + "/fatrpc").c_str(), 0755);
             }
-            if (fs::exists("./fatgotchi")) {
+            if (installGotchi && fs::exists("./fatgotchi")) {
                 fs::copy_file("./fatgotchi", installDir + "/fatgotchi", fs::copy_options::overwrite_existing, ec);
                 chmod((installDir + "/fatgotchi").c_str(), 0755);
             }
-            if (fs::exists("./fatrain")) {
+            if (installRain && fs::exists("./fatrain")) {
                 fs::copy_file("./fatrain", installDir + "/fatrain", fs::copy_options::overwrite_existing, ec);
                 chmod((installDir + "/fatrain").c_str(), 0755);
             }
@@ -663,10 +728,41 @@ int main(int argc, char* argv[]) {
         DiscordRPC::enableAutostart();
     }
 
+    std::vector<std::string> installedModules = { "fatfetch" };
+    std::vector<std::string> rejectedModules;
+    if (installJump) installedModules.push_back("fatjump"); else rejectedModules.push_back("fatjump");
+    if (installGotchi) installedModules.push_back("fatgotchi"); else rejectedModules.push_back("fatgotchi");
+    if (installRain) installedModules.push_back("fatrain"); else rejectedModules.push_back("fatrain");
+    if (installRpc) installedModules.push_back("fatrpc"); else rejectedModules.push_back("fatrpc");
+
+    std::string installedStr = "";
+    for (size_t i = 0; i < installedModules.size(); ++i) {
+        if (i > 0) installedStr += ", ";
+        installedStr += installedModules[i];
+    }
+
     if (lang == Language::PL) {
-        std::cout << "\n\033[1;32m✔ Zainstalowano binarki (fatfetch, fatjump, fatrpc, fatgotchi, fatrain) w: \033[1;37m" << targetPath << " oraz " << userLocalBin << "\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Zainstalowano wybrane moduły: \033[1;37m" << installedStr << "\033[0m\n"
+                  << "  Lokalizacje: \033[1;37m" << targetPath << " oraz " << userLocalBin << "\033[0m\n";
+        if (!rejectedModules.empty()) {
+            std::cout << "  \033[1;33m🗑️  Wyjebany bloat z instalacji: \033[1;31m";
+            for (size_t i = 0; i < rejectedModules.size(); ++i) {
+                if (i > 0) std::cout << ", ";
+                std::cout << rejectedModules[i];
+            }
+            std::cout << " \033[1;32m(Prawdziwy minimalizm Arch Linux zachowany!)\033[0m\n";
+        }
     } else {
-        std::cout << "\n\033[1;32m✔ Installed binaries (fatfetch, fatjump, fatrpc, fatgotchi, fatrain) to: \033[1;37m" << targetPath << " and " << userLocalBin << "\033[0m\n";
+        std::cout << "\n\033[1;32m✔ Installed chosen modules: \033[1;37m" << installedStr << "\033[0m\n"
+                  << "  Destinations: \033[1;37m" << targetPath << " and " << userLocalBin << "\033[0m\n";
+        if (!rejectedModules.empty()) {
+            std::cout << "  \033[1;33m🗑️  Stripped bloat: \033[1;31m";
+            for (size_t i = 0; i < rejectedModules.size(); ++i) {
+                if (i > 0) std::cout << ", ";
+                std::cout << rejectedModules[i];
+            }
+            std::cout << " \033[1;32m(Pure Arch minimalism preserved!)\033[0m\n";
+        }
     }
 
     configureShellIntegration(homeDir, targetPath, autoStart, lang);

@@ -55,18 +55,53 @@ if [[ "$LANG_CHOICE" == "2" || "$LANG_CHOICE" == "en" || "$LANG_CHOICE" == "EN" 
     echo ""
     read -rp "Select identity [1-4] (1): " PERSONA_CHOICE
 
-    echo -e "\n\033[1;33m[ STEP 2/3: INSTALLATION TARGET ]\033[0m\n"
+    echo -e "\n\033[1;33m[ STEP 2/4: BLOAT CONTROL - CHOOSE WHAT TO INSTALL ]\033[0m\n"
+    echo "  1) 🏰 Full Bloat 350kg Edition (Install all: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)"
+    echo "  2) 🪶 Pure Arch Minimalist     (Only core fatfetch - strip all games, widgets and daemons)"
+    echo "  3) ⚙️  Custom Arch DIY          (Choose module by module what to install / reject)"
+    echo ""
+    read -rp "Select mode [1-3] (1): " BLOAT_CHOICE
+
+    INSTALL_JUMP=1
+    INSTALL_GOTCHI=1
+    INSTALL_RAIN=1
+    INSTALL_RPC=1
+
+    if [[ "$BLOAT_CHOICE" == "2" ]]; then
+        INSTALL_JUMP=0
+        INSTALL_GOTCHI=0
+        INSTALL_RAIN=0
+        INSTALL_RPC=0
+    elif [[ "$BLOAT_CHOICE" == "3" ]]; then
+        echo ""
+        read -rp "  -> Install fatjump (slow-motion jumping chad)? [Y/n]: " ASK_JUMP
+        [[ "$ASK_JUMP" == "n" || "$ASK_JUMP" == "N" ]] && INSTALL_JUMP=0
+
+        read -rp "  -> Install fatgotchi (Tamagotchi burger feeding game)? [Y/n]: " ASK_GOTCHI
+        [[ "$ASK_GOTCHI" == "n" || "$ASK_GOTCHI" == "N" ]] && INSTALL_GOTCHI=0
+
+        read -rp "  -> Install fatrain (burger rain game & screensaver)? [Y/n]: " ASK_RAIN
+        [[ "$ASK_RAIN" == "n" || "$ASK_RAIN" == "N" ]] && INSTALL_RAIN=0
+
+        read -rp "  -> Install fatrpc (Discord Rich Presence daemon)? [Y/n]: " ASK_RPC
+        [[ "$ASK_RPC" == "n" || "$ASK_RPC" == "N" ]] && INSTALL_RPC=0
+    fi
+
+    echo -e "\n\033[1;33m[ STEP 3/4: INSTALLATION TARGET ]\033[0m\n"
     echo "  1) /usr/local/bin/fatfetch (System-wide - Recommended)"
     echo "  2) ~/.local/bin/fatfetch   (User-only)"
     echo ""
     read -rp "Select option [1-2] (1): " TARGET_CHOICE
 
-    echo -e "\n\033[1;33m[ STEP 3/3: DISCORD RICH PRESENCE (RPC) ]\033[0m\n"
-    echo "  Enable Discord RPC daemon autostart on system boot? [Y/n]"
-    read -rp "Enable Discord RPC? [Y/n] (y): " RPC_CHOICE
+    RPC_CHOICE="n"
+    if [[ $INSTALL_RPC -eq 1 ]]; then
+        echo -e "\n\033[1;33m[ STEP 4/4: DISCORD RICH PRESENCE (RPC) ]\033[0m\n"
+        echo "  Enable Discord RPC daemon autostart on system boot? [Y/n]"
+        read -rp "Enable Discord RPC? [Y/n] (y): " RPC_CHOICE
+    fi
 else
     LANG="pl"
-    echo -e "\n\033[1;33m[ KROK 1/3: KIM CHCESZ BYĆ W FATfetch? ]\033[0m\n"
+    echo -e "\n\033[1;33m[ KROK 1/4: KIM CHCESZ BYĆ W FATfetch? ]\033[0m\n"
     echo "  1) 🦣 Arch Chad Grubas (Domyślny)"
     echo "  2) 🌸 300kg Gruby Femboy (Zakolanówki + Paleta Femboy)"
     echo "  3) 🏳️‍⚧️ Trans Pride Femboy"
@@ -74,15 +109,50 @@ else
     echo ""
     read -rp "Wybierz tożsamość [1-4] (1): " PERSONA_CHOICE
 
-    echo -e "\n\033[1;33m[ KROK 2/3: LOKALIZACJA INSTALACJI ]\033[0m\n"
+    echo -e "\n\033[1;33m[ KROK 2/4: KONTROLA BLOATU - WYBIERZ CO CHCESZ ZAINSTALOWAĆ ]\033[0m\n"
+    echo "  1) 🏰 Full Bloat 350kg Edition (Instaluj wszystko: fatfetch, fatjump, fatgotchi, fatrain, fatrpc)"
+    echo "  2) 🪶 Pure Arch Minimalist     (Tylko czysty fatfetch - wyjeb wszystkie gry, widżety i daemony)"
+    echo "  3) ⚙️  Custom Arch DIY          (Ręczny wybór: sam decydujesz co instalujesz, a co wywalasz)"
+    echo ""
+    read -rp "Wybierz tryb [1-3] (1): " BLOAT_CHOICE
+
+    INSTALL_JUMP=1
+    INSTALL_GOTCHI=1
+    INSTALL_RAIN=1
+    INSTALL_RPC=1
+
+    if [[ "$BLOAT_CHOICE" == "2" ]]; then
+        INSTALL_JUMP=0
+        INSTALL_GOTCHI=0
+        INSTALL_RAIN=0
+        INSTALL_RPC=0
+    elif [[ "$BLOAT_CHOICE" == "3" ]]; then
+        echo ""
+        read -rp "  -> Zainstalować fatjump (skaczący grubas w slow-mo)? [T/n]: " ASK_JUMP
+        [[ "$ASK_JUMP" == "n" || "$ASK_JUMP" == "N" ]] && INSTALL_JUMP=0
+
+        read -rp "  -> Zainstalować fatgotchi (gra Tamagotchi z karmieniem burgerami)? [T/n]: " ASK_GOTCHI
+        [[ "$ASK_GOTCHI" == "n" || "$ASK_GOTCHI" == "N" ]] && INSTALL_GOTCHI=0
+
+        read -rp "  -> Zainstalować fatrain (deszcz burgerów i wygaszacz terminala)? [T/n]: " ASK_RAIN
+        [[ "$ASK_RAIN" == "n" || "$ASK_RAIN" == "N" ]] && INSTALL_RAIN=0
+
+        read -rp "  -> Zainstalować fatrpc (Discord Rich Presence daemon)? [T/n]: " ASK_RPC
+        [[ "$ASK_RPC" == "n" || "$ASK_RPC" == "N" ]] && INSTALL_RPC=0
+    fi
+
+    echo -e "\n\033[1;33m[ KROK 3/4: LOKALIZACJA INSTALACJI ]\033[0m\n"
     echo "  1) /usr/local/bin/fatfetch (Dla całego systemu - ZALECANE)"
     echo "  2) ~/.local/bin/fatfetch   (Dla użytkownika)"
     echo ""
     read -rp "Wybierz opcję [1-2] (1): " TARGET_CHOICE
 
-    echo -e "\n\033[1;33m[ KROK 3/3: DISCORD RICH PRESENCE (RPC) ]\033[0m\n"
-    echo "  Czy chcesz włączyć demona Discord RPC w autostarcie systemu?"
-    read -rp "Włączyć Discord RPC w autostarcie? [T/n] (t): " RPC_CHOICE
+    RPC_CHOICE="n"
+    if [[ $INSTALL_RPC -eq 1 ]]; then
+        echo -e "\n\033[1;33m[ KROK 4/4: DISCORD RICH PRESENCE (RPC) ]\033[0m\n"
+        echo "  Czy chcesz włączyć demona Discord RPC w autostarcie systemu?"
+        read -rp "Włączyć Discord RPC w autostarcie? [T/n] (t): " RPC_CHOICE
+    fi
 fi
 
 LOGO="archguy"
@@ -268,35 +338,67 @@ done
 
 printf "\033[?25h"
 
+COMPILE_TARGETS="fatfetch"
+[[ $INSTALL_JUMP -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatjump"
+[[ $INSTALL_GOTCHI -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatgotchi"
+[[ $INSTALL_RAIN -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatrain"
+[[ $INSTALL_RPC -eq 1 ]] && COMPILE_TARGETS="$COMPILE_TARGETS fatrpc"
+
+make $COMPILE_TARGETS >/dev/null 2>&1 &
+MAKE_PID=$!
+
 # ------------------------------------------------------------------------------
 #  COPY BINARIES & FINISH
 # ------------------------------------------------------------------------------
+wait $MAKE_PID 2>/dev/null || true
+
 mkdir -p "$HOME/.local/bin"
 cp -f ./fatfetch "$HOME/.local/bin/fatfetch" 2>/dev/null || true
-cp -f ./fatjump "$HOME/.local/bin/fatjump" 2>/dev/null || true
-cp -f ./fatrpc "$HOME/.local/bin/fatrpc" 2>/dev/null || true
-cp -f ./fatgotchi "$HOME/.local/bin/fatgotchi" 2>/dev/null || true
-cp -f ./fatrain "$HOME/.local/bin/fatrain" 2>/dev/null || true
-chmod 755 "$HOME/.local/bin/fatfetch" "$HOME/.local/bin/fatjump" "$HOME/.local/bin/fatrpc" "$HOME/.local/bin/fatgotchi" "$HOME/.local/bin/fatrain" 2>/dev/null || true
+chmod 755 "$HOME/.local/bin/fatfetch"
+
+CP_LIST="./fatfetch"
+
+if [[ $INSTALL_JUMP -eq 1 ]]; then
+    cp -f ./fatjump "$HOME/.local/bin/fatjump" 2>/dev/null || true
+    chmod 755 "$HOME/.local/bin/fatjump" 2>/dev/null || true
+    CP_LIST="$CP_LIST ./fatjump"
+fi
+if [[ $INSTALL_RPC -eq 1 ]]; then
+    cp -f ./fatrpc "$HOME/.local/bin/fatrpc" 2>/dev/null || true
+    chmod 755 "$HOME/.local/bin/fatrpc" 2>/dev/null || true
+    CP_LIST="$CP_LIST ./fatrpc"
+fi
+if [[ $INSTALL_GOTCHI -eq 1 ]]; then
+    cp -f ./fatgotchi "$HOME/.local/bin/fatgotchi" 2>/dev/null || true
+    chmod 755 "$HOME/.local/bin/fatgotchi" 2>/dev/null || true
+    CP_LIST="$CP_LIST ./fatgotchi"
+fi
+if [[ $INSTALL_RAIN -eq 1 ]]; then
+    cp -f ./fatrain "$HOME/.local/bin/fatrain" 2>/dev/null || true
+    chmod 755 "$HOME/.local/bin/fatrain" 2>/dev/null || true
+    CP_LIST="$CP_LIST ./fatrain"
+fi
 
 if [[ "$TARGET_CHOICE" == "1" ]]; then
     if [[ $EUID -ne 0 ]]; then
         sudo mkdir -p /usr/local/bin 2>/dev/null || true
-        sudo cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi ./fatrain /usr/local/bin/ 2>/dev/null || true
-        sudo chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc /usr/local/bin/fatgotchi /usr/local/bin/fatrain 2>/dev/null || true
+        sudo cp -f $CP_LIST /usr/local/bin/ 2>/dev/null || true
+        sudo chmod 755 /usr/local/bin/fat* 2>/dev/null || true
     else
         mkdir -p /usr/local/bin
-        cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi ./fatrain /usr/local/bin/
-        chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc /usr/local/bin/fatgotchi /usr/local/bin/fatrain
+        cp -f $CP_LIST /usr/local/bin/
+        chmod 755 /usr/local/bin/fat*
     fi
 fi
 
 # Discord RPC autostart setup
-if [[ "$RPC_CHOICE" == "" || "$RPC_CHOICE" == "t" || "$RPC_CHOICE" == "T" || "$RPC_CHOICE" == "y" || "$RPC_CHOICE" == "Y" || "$RPC_CHOICE" == "tak" || "$RPC_CHOICE" == "yes" ]]; then
-    "$HOME/.local/bin/fatfetch" --rpc-enable >/dev/null 2>&1 || true
+if [[ $INSTALL_RPC -eq 1 ]]; then
+    if [[ "$RPC_CHOICE" == "" || "$RPC_CHOICE" == "t" || "$RPC_CHOICE" == "T" || "$RPC_CHOICE" == "y" || "$RPC_CHOICE" == "Y" || "$RPC_CHOICE" == "tak" || "$RPC_CHOICE" == "yes" ]]; then
+        "$HOME/.local/bin/fatfetch" --rpc-enable >/dev/null 2>&1 || true
+    fi
 fi
 
-# Ensure PATH in rc files
+# Ensure PATH in rc files and add aliases only for installed tools
 for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
     if [[ -f "$rc" ]]; then
         if ! grep -q "$HOME/.local/bin" "$rc"; then
@@ -305,35 +407,48 @@ for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
         if ! grep -q "alias fatfetch=" "$rc"; then
             echo -e 'alias fatfetch="$HOME/.local/bin/fatfetch"' >> "$rc"
         fi
-        if ! grep -q "alias fatjump=" "$rc"; then
+        if [[ $INSTALL_JUMP -eq 1 ]] && ! grep -q "alias fatjump=" "$rc"; then
             echo -e 'alias fatjump="$HOME/.local/bin/fatjump"' >> "$rc"
         fi
-        if ! grep -q "alias fatrpc=" "$rc"; then
+        if [[ $INSTALL_RPC -eq 1 ]] && ! grep -q "alias fatrpc=" "$rc"; then
             echo -e 'alias fatrpc="$HOME/.local/bin/fatrpc"' >> "$rc"
         fi
-        if ! grep -q "alias fatgotchi=" "$rc"; then
+        if [[ $INSTALL_GOTCHI -eq 1 ]] && ! grep -q "alias fatgotchi=" "$rc"; then
             echo -e 'alias fatgotchi="$HOME/.local/bin/fatgotchi"' >> "$rc"
         fi
-        if ! grep -q "alias fatrain=" "$rc"; then
+        if [[ $INSTALL_RAIN -eq 1 ]] && ! grep -q "alias fatrain=" "$rc"; then
             echo -e 'alias fatrain="$HOME/.local/bin/fatrain"' >> "$rc"
         fi
     fi
 done
 
+INSTALLED_LIST="fatfetch"
+REJECTED_LIST=""
+[[ $INSTALL_JUMP -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatjump" || REJECTED_LIST="$REJECTED_LIST fatjump"
+[[ $INSTALL_GOTCHI -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatgotchi" || REJECTED_LIST="$REJECTED_LIST fatgotchi"
+[[ $INSTALL_RAIN -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatrain" || REJECTED_LIST="$REJECTED_LIST fatrain"
+[[ $INSTALL_RPC -eq 1 ]] && INSTALLED_LIST="$INSTALLED_LIST, fatrpc" || REJECTED_LIST="$REJECTED_LIST fatrpc"
+
 echo -e "\n\033[1;32m"
 echo "╔════════════════════════════════════════════════════════════════════════════════╗"
 echo "║                   🏁  INSTALLATION COMPLETE!  🏁                               ║"
-echo "║     INSTALACJA FATfetch, FATJUMP, FATRPC, FATGOTCHI I FATRAIN ZAKOŃCZONA!     ║"
+echo "║               INSTALACJA WYBRANYCH MODUŁÓW ZAKOŃCZONA!                         ║"
 echo "╚════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\033[0m"
 
-echo -e "\033[1;33m💡 WSKAZÓWKI:\033[0m"
+echo -e "✔ \033[1;32mZainstalowane moduły:\033[0m \033[1;37m$INSTALLED_LIST\033[0m"
+if [[ -n "$REJECTED_LIST" ]]; then
+    echo -e "🗑️  \033[1;33mWyjebany bloat z instalacji:\033[0m\033[1;31m$REJECTED_LIST\033[0m \033[1;32m(Prawdziwy minimalizm Arch Linux zachowany!)\033[0m"
+fi
+
+echo -e "\n\033[1;33m💡 WSKAZÓWKI:\033[0m"
 echo -e "   • Główny fetch: \033[1;36mfatfetch\033[0m"
-echo -e "   • Deszcz burgerów: \033[1;32mfatrain\033[0m  (lub \033[1;32mfatfetch --rain\033[0m)"
-echo -e "   • Gra Tamagotchi: \033[1;33mfatgotchi\033[0m"
-echo -e "   • Skaczący grubas w slow-mo: \033[1;35mfatjump\033[0m"
-echo -e "   • Discord RPC daemon: \033[1;34mfatrpc status\033[0m"
+[[ $INSTALL_RAIN -eq 1 ]] && echo -e "   • Deszcz burgerów: \033[1;32mfatrain\033[0m"
+[[ $INSTALL_GOTCHI -eq 1 ]] && echo -e "   • Gra Tamagotchi: \033[1;33mfatgotchi\033[0m"
+[[ $INSTALL_JUMP -eq 1 ]] && echo -e "   • Skaczący grubas w slow-mo: \033[1;35mfatjump\033[0m"
+[[ $INSTALL_RPC -eq 1 ]] && echo -e "   • Discord RPC daemon: \033[1;34mfatrpc status\033[0m"
 echo -e "   • Konfigurator TUI: \033[1;36mfatfetch --config\033[0m"
 echo -e "   • Wpisz: \033[1;36msource ~/.bashrc\033[0m (lub otwórz nowy terminal)!\n"
 
 "$HOME/.local/bin/fatfetch"
+
