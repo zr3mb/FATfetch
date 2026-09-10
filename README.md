@@ -49,6 +49,21 @@ cd FATfetch
 
 ## 🕹️ Konfigurator TUI & Gry i Komendy
 
+### 🍔 Nowa Gra & Wygaszacz: `fatrain` (Deszcz Burgerów i Arch Userzy):
+Z nieba spadają podwójne burgery 6XL, puszki Monstera i pierogi ze skwarkami! Na dole ekranu Arch Userzy łapią jedzenie w paszcze `( >O< )`! Unikaj spadającego mydła i pryszniców (`🚿❌`).
+```bash
+fatrain
+# lub: fatfetch --rain
+```
+**Sterowanie w `fatrain`:**
+- `[A]` / `[D]` lub `[←]` / `[→]` – Sterowanie Arch Chadem na dole (łapanie burgerów)
+- `[Spacja]` – Zmiana trybu: **Tryb Gracza** ↔ **Autopilot (Wygaszacz ekranu)**
+- `[p]` – Przełączanie palet kolorystycznych (Femboy, Catppuccin, Pride, Dracula, Cyan)
+- `[+]` / `[-]` – Zwiększenie / zmniejszenie gęstości deszczu burgerów
+- `[q]` / `[Esc]` – Wyjście
+
+---
+
 ### 🎮 Nowa Gra: `fatgotchi` (Tamagotchi z Arch Chadem):
 Karm grubasa burgerami 6XL i pierogami oraz nawadniaj Monsterem Ultra White w czasie rzeczywistym! Uważaj: jeśli schudnie – przegrywasz, ale jeśli przekarmisz burgerami – **bebech pęknie i zaleje klawiaturę sosem czosnkowym**!
 ```bash

@@ -1,5 +1,6 @@
 #include "fatgotchi.hpp"
 #include "palettes.hpp"
+#include "jokes.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -98,6 +99,7 @@ void FatgotchiGame::run() {
         int secondsSurvived = 0;
         int tickCounter = 0;
         std::string lastActionMsg = "Rozpoczęto opiekę nad Arch Chadem! Karm i nawadniaj!";
+        std::string bellyQuote = JokeGenerator::getRandomBellyComment(Language::PL);
         std::string gameOverReason = "";
         bool gameOver = false;
 
@@ -114,6 +116,7 @@ void FatgotchiGame::run() {
                     monsterLevel -= 3.0;
                     score += 25;
                     lastActionMsg = "🍔 Zjadł podwójnego Burgera 6XL! (+12% Tłuszczu)";
+                    bellyQuote = JokeGenerator::getRandomBellyComment(Language::PL);
                 } else if (ch == 'm' || ch == 'M' || ch == '2') {
                     monsterLevel += 15.0;
                     fatLevel -= 2.0;
@@ -124,11 +127,13 @@ void FatgotchiGame::run() {
                     monsterLevel -= 5.0;
                     score += 45;
                     lastActionMsg = "🥟 Wciągnął michę Pierogów ze skwarkami! (+20% Tłuszczu)";
+                    bellyQuote = JokeGenerator::getRandomBellyComment(Language::PL);
                 } else if (ch == 'k' || ch == 'K' || ch == '4') {
                     fatLevel -= 14.0;
                     monsterLevel -= 12.0;
                     score += 150;
                     lastActionMsg = "💻 Skompilował jądro Zen i Chromium z AUR! (+150 pkt, -14% Tłuszczu)";
+                    bellyQuote = JokeGenerator::getRandomBellyComment(Language::PL);
                 }
             }
 
@@ -143,6 +148,9 @@ void FatgotchiGame::run() {
 
             if (tickCounter % 15 == 0) {
                 secondsSurvived++;
+                if (secondsSurvived % 6 == 0) {
+                    bellyQuote = JokeGenerator::getRandomBellyComment(Language::PL);
+                }
             }
 
             // Check Game Over Conditions
@@ -237,7 +245,8 @@ void FatgotchiGame::run() {
             }
 
             std::cout << " ────────────────────────────────────────────────────────────────────────────────\n";
-            std::cout << "  📢 Komunikat: " << C_WHT << lastActionMsg << C_RST << "\033[K\n";
+            std::cout << "  📢 Akcja:  " << C_WHT << lastActionMsg << C_RST << "\033[K\n";
+            std::cout << "  🍗 Bebech: " << C_YEL << bellyQuote << C_RST << "\033[K\n";
             std::cout << " ────────────────────────────────────────────────────────────────────────────────\n";
             std::cout << "  [1/B] 🍔 Burger 6XL (+12% Tłuszcz)    [2/M] 🥫 Monster White (+15% Nawodnienie)\n";
             std::cout << "  [3/P] 🥟 Pierogi ze skwarkami (+20%)   [4/K] 💻 Kompiluj AUR (+150pkt, -14% Tłuszcz)\n";

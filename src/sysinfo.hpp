@@ -27,6 +27,7 @@ struct SysInfo {
     std::string grass;
     std::string shower;
     std::string girlfriend;
+    std::string belly;
     std::string archQuote;
     FieldLabels labels;
 };

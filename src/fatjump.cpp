@@ -1,6 +1,7 @@
 #include "fatjump.hpp"
 #include "palettes.hpp"
 #include "ascii_art.hpp"
+#include "jokes.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -297,6 +298,7 @@ void FatJump::run(const std::string& initialPalette, const std::string& initialP
 
     int frameIndex = 0;
     int jumpCounter = 0;
+    std::string currentBellyComment = JokeGenerator::getRandomBellyComment(Language::PL);
 
     std::cout << "\033[2J\033[H" << std::flush;
 
@@ -345,6 +347,7 @@ void FatJump::run(const std::string& initialPalette, const std::string& initialP
                   << "  |  Sejsmograf: " << "\033[1;31m" << curFrame.richterLevel << C_RST
                   << "  |  Częstotliwość: " << C_YEL << curFrame.jiggleSpeed << C_RST << "\033[K\n";
         std::cout << " " << C_MAG << "Faza: " << C_WHT << curFrame.phaseName << C_RST << "\033[K\n";
+        std::cout << " " << C_YEL << "📢 Bebech: " << C_WHT << currentBellyComment << C_RST << "\033[K\n";
         std::cout << " ────────────────────────────────────────────────────────────────────────────────\n";
 
         // Render Jump Scene
@@ -360,6 +363,7 @@ void FatJump::run(const std::string& initialPalette, const std::string& initialP
         frameIndex = (frameIndex + 1) % frames.size();
         if (frameIndex == 0) {
             jumpCounter++;
+            currentBellyComment = JokeGenerator::getRandomBellyComment(Language::PL);
         }
     }
 

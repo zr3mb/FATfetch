@@ -8,6 +8,7 @@
 #include "fatjump.hpp"
 #include "discord_rpc.hpp"
 #include "fatgotchi.hpp"
+#include "fatrain.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -33,6 +34,9 @@ int main(int argc, char* argv[]) {
             return 0;
         } else if (arg == "--game" || arg == "game" || arg == "--gotchi" || arg == "gotchi") {
             FATfetch::FatgotchiGame::run();
+            return 0;
+        } else if (arg == "--rain" || arg == "rain") {
+            FATfetch::FatRain::run(config.paletteName);
             return 0;
         } else if (arg == "--jump" || arg == "jump") {
             FATfetch::FatJump::run(config.paletteName, config.logoName);

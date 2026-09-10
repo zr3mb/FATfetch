@@ -13,6 +13,7 @@ void DisplayManager::printHelp(Language lang) {
     std::cout << "\n\033[1;35mKONFIGURACJA, GRY, WIDŻETY I DISCORD RPC:\033[0m\n"
               << "  -c, --config          Uruchom interaktywny graficzny konfigurator TUI\n"
               << "  --game                Uruchom grę 'fatgotchi' (karm burgerami, nawadniaj Monsterem!)\n"
+              << "  --rain                Uruchom wygaszacz/grę 'fatrain' (deszcz burgerów i Arch userzy)\n"
               << "  --jump                Uruchom widżet 'fatjump' (grubas skaczący w zwolnionym tempie)\n"
               << "  --rpc                 Uruchom Discord Rich Presence w trybie podglądu na żywo\n"
               << "  --rpc-enable          Włącz autostart demona Discord RPC przy starcie systemu\n"
@@ -128,6 +129,7 @@ void DisplayManager::render(const SysInfo& info, const DisplayConfig& config) {
     addField(C_GRN, info.labels.grass, info.grass);
     addField(C_YEL, info.labels.shower, info.shower);
     addField(C_RED, info.labels.girlfriend, info.girlfriend);
+    addField(C_YEL, info.labels.belly, info.belly);
 
     // Add empty line and color blocks
     if (config.showColorBlocks) {

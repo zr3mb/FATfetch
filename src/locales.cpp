@@ -54,6 +54,7 @@ FieldLabels LocaleManager::getLabels(Language lang) {
             "Trawa",
             "Prysznic",
             "Dziewczyna",
+            "Bebech",
             "ŻART O UŻYTKOWNIKACH ARCHA"
         };
     } else {
@@ -75,6 +76,7 @@ FieldLabels LocaleManager::getLabels(Language lang) {
             "Grass",
             "Shower",
             "Girlfriend",
+            "Belly (Bebech)",
             "ARCH LINUX JOKE OF THE RUN"
         };
     }

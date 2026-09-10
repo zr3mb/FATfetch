@@ -276,17 +276,18 @@ cp -f ./fatfetch "$HOME/.local/bin/fatfetch" 2>/dev/null || true
 cp -f ./fatjump "$HOME/.local/bin/fatjump" 2>/dev/null || true
 cp -f ./fatrpc "$HOME/.local/bin/fatrpc" 2>/dev/null || true
 cp -f ./fatgotchi "$HOME/.local/bin/fatgotchi" 2>/dev/null || true
-chmod 755 "$HOME/.local/bin/fatfetch" "$HOME/.local/bin/fatjump" "$HOME/.local/bin/fatrpc" "$HOME/.local/bin/fatgotchi" 2>/dev/null || true
+cp -f ./fatrain "$HOME/.local/bin/fatrain" 2>/dev/null || true
+chmod 755 "$HOME/.local/bin/fatfetch" "$HOME/.local/bin/fatjump" "$HOME/.local/bin/fatrpc" "$HOME/.local/bin/fatgotchi" "$HOME/.local/bin/fatrain" 2>/dev/null || true
 
 if [[ "$TARGET_CHOICE" == "1" ]]; then
     if [[ $EUID -ne 0 ]]; then
         sudo mkdir -p /usr/local/bin 2>/dev/null || true
-        sudo cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi /usr/local/bin/ 2>/dev/null || true
-        sudo chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc /usr/local/bin/fatgotchi 2>/dev/null || true
+        sudo cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi ./fatrain /usr/local/bin/ 2>/dev/null || true
+        sudo chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc /usr/local/bin/fatgotchi /usr/local/bin/fatrain 2>/dev/null || true
     else
         mkdir -p /usr/local/bin
-        cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi /usr/local/bin/
-        chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc /usr/local/bin/fatgotchi
+        cp -f ./fatfetch ./fatjump ./fatrpc ./fatgotchi ./fatrain /usr/local/bin/
+        chmod 755 /usr/local/bin/fatfetch /usr/local/bin/fatjump /usr/local/bin/fatrpc /usr/local/bin/fatgotchi /usr/local/bin/fatrain
     fi
 fi
 
@@ -313,19 +314,23 @@ for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
         if ! grep -q "alias fatgotchi=" "$rc"; then
             echo -e 'alias fatgotchi="$HOME/.local/bin/fatgotchi"' >> "$rc"
         fi
+        if ! grep -q "alias fatrain=" "$rc"; then
+            echo -e 'alias fatrain="$HOME/.local/bin/fatrain"' >> "$rc"
+        fi
     fi
 done
 
 echo -e "\n\033[1;32m"
 echo "╔════════════════════════════════════════════════════════════════════════════════╗"
 echo "║                   🏁  INSTALLATION COMPLETE!  🏁                               ║"
-echo "║       INSTALACJA FATfetch, FATJUMP, FATRPC I FATGOTCHI ZAKOŃCZONA SUKCESEM!    ║"
+echo "║     INSTALACJA FATfetch, FATJUMP, FATRPC, FATGOTCHI I FATRAIN ZAKOŃCZONA!     ║"
 echo "╚════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\033[0m"
 
 echo -e "\033[1;33m💡 WSKAZÓWKI:\033[0m"
 echo -e "   • Główny fetch: \033[1;36mfatfetch\033[0m"
-echo -e "   • Gra Tamagotchi: \033[1;33mfatgotchi\033[0m  (lub \033[1;33mfatfetch --game\033[0m)"
+echo -e "   • Deszcz burgerów: \033[1;32mfatrain\033[0m  (lub \033[1;32mfatfetch --rain\033[0m)"
+echo -e "   • Gra Tamagotchi: \033[1;33mfatgotchi\033[0m"
 echo -e "   • Skaczący grubas w slow-mo: \033[1;35mfatjump\033[0m"
 echo -e "   • Discord RPC daemon: \033[1;34mfatrpc status\033[0m"
 echo -e "   • Konfigurator TUI: \033[1;36mfatfetch --config\033[0m"

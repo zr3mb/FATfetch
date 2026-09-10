@@ -328,6 +328,7 @@ SysInfo SysInfoCollector::collectInfo(Language lang) {
     info.grass = LocaleManager::getGrassValue(lang);
     info.shower = LocaleManager::getShowerValue(lang);
     info.girlfriend = LocaleManager::getGirlfriendValue(lang);
+    info.belly = JokeGenerator::getRandomBellyComment(lang);
     info.archQuote = JokeGenerator::getRandomJoke(lang);
     info.labels = LocaleManager::getLabels(lang);
     return info;
