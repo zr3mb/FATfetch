@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 int main(int argc, char* argv[]) {
     // 1. Load config file from ~/.config/fatfetch/config.conf
@@ -88,6 +89,23 @@ int main(int argc, char* argv[]) {
             config.logoName = argv[++i];
         } else if (arg.rfind("--logo=", 0) == 0) {
             config.logoName = arg.substr(7);
+        } else if ((arg == "-a" || arg == "--ascii") && i + 1 < argc) {
+            config.logoName = argv[++i];
+        } else if (arg.rfind("--ascii=", 0) == 0) {
+            config.logoName = arg.substr(8);
+        } else if (arg == "--import-ascii" && i + 1 < argc) {
+            std::string src = argv[++i];
+            std::string name = (i + 1 < argc && argv[i + 1][0] != '-') ? argv[++i] : "";
+            if (FATfetch::AsciiManager::importAscii(src, name)) {
+                std::string targetName = name.empty() ? std::filesystem::path(src).stem().string() : name;
+                std::cout << "\033[1;32m✔ Pomyślnie zaimportowano postać ASCII: \033[1;37m" << targetName << "\033[1;32m do katalogu: \033[1;37m"
+                          << FATfetch::AsciiManager::getCustomAsciiDir() << "\033[0m\n"
+                          << "Możesz jej natychmiast użyć wpisując: \033[1;36mfatfetch -l " << targetName << "\033[0m\n";
+            } else {
+                std::cerr << "\033[1;31m✖ Błąd: Nie znaleziono pliku źródłowego: " << src << "\033[0m\n";
+                return 1;
+            }
+            return 0;
         } else {
             std::cerr << "Nieznana flaga / Unknown flag: " << arg << " (Use --help / Użyj --help)\n";
             return 1;

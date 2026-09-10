@@ -9,6 +9,7 @@
 #include <string>
 #include <cstdlib>
 #include <unistd.h>
+#include <filesystem>
 
 namespace FATfetch {
 
@@ -71,6 +72,7 @@ void TuiConfigurator::run() {
         std::cout << "  7) Discord RPC:       " << (rpcEnabled ? C_GRN + "[AUTOSTART AKTYWNY]" : "\033[1;31m[WYŁĄCZONY]") << C_RST << "  (Naciśnij 7, aby przełączyć)\n\n";
 
         std::cout << " ────────────────────────────────────────────────────────────────────────────────\n";
+        std::cout << "  W) " << C_YEL << "📥 WGRAJ WŁASNY PLIK ASCII (.txt)" << C_RST << "  (Dodaj postać do ~/.config/fatfetch/ascii/)\n";
         std::cout << "  8) " << C_GRN << "💾 ZAPISZ I ZASTOSUJ USTAWIENIA" << C_RST << "\n";
         std::cout << "  9) " << C_CYN << "🚀 PODGLĄD NA ŻYWO (Uruchom FATfetch)" << C_RST << "\n";
         std::cout << "  0) " << C_WHT << "❌ Wyjdź bez zapisywania" << C_RST << "\n";
@@ -87,7 +89,7 @@ void TuiConfigurator::run() {
             std::cout << "  ...\n";
         }
 
-        std::cout << "\n" << C_WHT << "Wybierz opcję [0-9]: " << C_RST;
+        std::cout << "\n" << C_WHT << "Wybierz opcję [0-9, W]: " << C_RST;
         std::string input;
         std::getline(std::cin, input);
 
@@ -110,6 +112,36 @@ void TuiConfigurator::run() {
                 DiscordRPC::disableAutostart();
             } else {
                 DiscordRPC::enableAutostart();
+            }
+        } else if (input == "w" || input == "W") {
+            clearScreen();
+            std::cout << "\n\033[1;36m[ 📥 WGRYWANIE WŁASNEJ POSTACI ASCII ]\033[0m\n\n";
+            std::cout << "Możesz wgrać dowolny plik tekstowy (.txt, .ascii) z grafiką ASCII.\n";
+            std::cout << "Może zawierać znaczniki kolorów ($C1, $C2, $SKN, $CYN, $RST itp.) lub zwykły tekst.\n\n";
+            std::cout << "Podaj pełną lub względną ścieżkę do pliku (np. ~/pobrane/kotek.txt): ";
+            std::string filePath;
+            std::getline(std::cin, filePath);
+            if (!filePath.empty()) {
+                std::cout << "Podaj unikalną nazwę dla tej postaci (np. kotek) [Enter = nazwa pliku]: ";
+                std::string customName;
+                std::getline(std::cin, customName);
+                if (AsciiManager::importAscii(filePath, customName)) {
+                    std::string finalName = customName.empty() ? std::filesystem::path(filePath).stem().string() : customName;
+                    logos = AsciiManager::getAvailableLogos();
+                    for (size_t i = 0; i < logos.size(); ++i) {
+                        if (logos[i] == finalName) {
+                            logoIndex = i;
+                            cfg.logo = finalName;
+                            break;
+                        }
+                    }
+                    std::cout << "\n\033[1;32m✔ Sukces! Postać '" << finalName << "' została zaimportowana do: \033[1;37m"
+                              << AsciiManager::getCustomAsciiDir() << "\033[0m\n";
+                    sleep(2);
+                } else {
+                    std::cout << "\n\033[1;31m✖ Błąd: Nie znaleziono podanego pliku: " << filePath << "\033[0m\n";
+                    sleep(2);
+                }
             }
         } else if (input == "8" || input == "s" || input == "S" || input == "zapisz") {
             cfg.logo = logos[logoIndex];

@@ -113,6 +113,26 @@ fatfetch --jump
 
 ---
 
+### 🎨 Własne Postacie i Grafiki ASCII (Custom Personas):
+Możesz dodać dowolną własną grafikę ASCII (.txt) i używać jej w `fatfetch`:
+1. **W konfiguratorze TUI:** Wpisz `fatfetch --config` i naciśnij `W`, aby wgrać plik z dysku.
+2. **Przez flagę importu:**
+   ```bash
+   fatfetch --import-ascii ~/obrazy/moj_kotek.txt kotek
+   # Od teraz postać jest dostępna na stałe:
+   fatfetch -l kotek
+   ```
+3. **Bezpośrednio z pliku:**
+   ```bash
+   fatfetch -a /sciezka/do/pliku.txt
+   ```
+4. **Ręcznie:** Wrzuć plik tekstowy do katalogu `~/.config/fatfetch/ascii/<twoja_nazwa>.txt`.
+
+> [!TIP]
+> W plikach ASCII możesz używać znaczników `$C1` do `$C6` (podstawią kolory aktualnej palety) oraz `$SKN`, `$CYN`, `$BLU`, `$MAG`, `$YEL`, `$RST`. Zwykły tekst bez znaczników zostanie automatycznie pokolorowany wybranym motywem!
+
+---
+
 ### Uruchomienie graficznego konfiguratora TUI:
 ```bash
 fatfetch --config
@@ -122,6 +142,12 @@ fatfetch -c
 
 ### Przykłady wywołania z flagami:
 ```bash
+# Uruchomienie z własnym plikiem ASCII
+fatfetch -a ~/moj_ascii.txt
+
+# Uruchomienie z zapisaną własną postacią
+fatfetch -l moja_postac
+
 # Uruchomienie z grubym femboyem i pastelową paletą Femboy
 fatfetch --logo fatfemboy --palette femboy
 
@@ -137,7 +163,7 @@ fatfetch --palette catppuccin
 # Lista wszystkich dostępnych palet z kolorowymi podglądami
 fatfetch --list-palettes
 
-# Lista dostępnych postaci ASCII
+# Lista dostępnych postaci ASCII (wbudowane + własne)
 fatfetch --list-logos
 
 # Losowy żart o Archu

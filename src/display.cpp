@@ -19,6 +19,8 @@ void DisplayManager::printHelp(Language lang) {
               << "  --rpc-enable          Włącz autostart demona Discord RPC przy starcie systemu\n"
               << "  --rpc-disable         Wyłącz autostart Discord RPC\n"
               << "  --rpc-status          Sprawdź status demona Discord RPC i połączenia\n"
+              << "  -a, --ascii <plik>    Użyj bezpośrednio własnego pliku z grafiką ASCII (.txt)\n"
+              << "  --import-ascii <plik> [nazwa] Importuj własną postać ASCII do ~/.config/fatfetch/ascii/\n"
               << "  -p, --palette <nazwa> Wybierz paletę kolorów: femboy, trans, rainbow, bi, pan, nonbinary, lesbian, catppuccin, dracula\n"
               << "  --list-palettes       Wyświetl listę dostępnych palet i motywów kolorystycznych\n"
               << "  --list-logos          Wyświetl listę dostępnych postaci i logotypów ASCII\n\n";
@@ -37,12 +39,30 @@ void DisplayManager::listPalettes() {
 }
 
 void DisplayManager::listLogos() {
-    std::cout << "\n\033[1;36m[ DOSTĘPNE POSTACIE I LOGA ASCII ]\033[0m\n\n";
+    std::cout << "\n\033[1;36m[ DOSTĘPNE WBUDOWANE POSTACIE I LOGA ASCII ]\033[0m\n\n";
     std::cout << "  1) \033[1marchguy\033[0m      - Legendarny gość w koszulce Arch Linux (Domyślne)\n"
               << "  2) \033[1mfatfemboy\033[0m    - Gruby femboy w zakolanówkach i bluzie Arch Linux 300kg UwU\n"
               << "  3) \033[1mfatarch\033[0m      - Ultra-szerokie, spasiony logo Archa /\\\n"
               << "  4) \033[1mdiscordmod\033[0m   - Mod z piwnicy\n"
               << "  5) \033[1mminimal\033[0m      - Małe logo dla małych terminali\n\n";
+
+    std::vector<std::string> allLogos = AsciiManager::getAvailableLogos();
+    std::vector<std::string> customLogos;
+    for (const auto& l : allLogos) {
+        if (l != "archguy" && l != "fatfemboy" && l != "fatarch" && l != "discordmod" && l != "minimal") {
+            customLogos.push_back(l);
+        }
+    }
+
+    std::cout << "\033[1;33m[ WŁASNE POSTACIE ASCII ]\033[0m (Katalog: \033[1;37m" << AsciiManager::getCustomAsciiDir() << "\033[0m)\n";
+    if (customLogos.empty()) {
+        std::cout << "  (Brak wgranych własnych postaci. Wrzuć plik .txt do ~/.config/fatfetch/ascii/ lub użyj --import-ascii)\n\n";
+    } else {
+        for (size_t i = 0; i < customLogos.size(); ++i) {
+            std::cout << "  • \033[1;32m" << customLogos[i] << "\033[0m  (Uruchom: fatfetch -l " << customLogos[i] << ")\n";
+        }
+        std::cout << "\n";
+    }
 }
 
 void DisplayManager::renderJokeOnly(Language lang, bool raw) {

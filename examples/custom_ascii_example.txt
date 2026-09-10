@@ -1,0 +1,21 @@
+# ==============================================================================
+#  FATfetch - WŁASNA POSTAĆ ASCII (CUSTOM ASCII TEMPLATE)
+#  Zapisz pliki .txt w: ~/.config/fatfetch/ascii/<nazwa>.txt
+#
+#  Dostępne znaczniki kolorów palety:
+#    $C1, $C2, $C3, $C4, $C5, $C6 - kolory aktywnej palety (np. Catppuccin, Femboy, Dracula)
+#    $CYN, $BLU, $MAG, $YEL, $GRN, $RED, $WHT, $SKN, $BLK, $DGR, $PNK - kolory ANSI
+#    $RST - reset koloru (\033[0m)
+#  Uwaga: jeśli plik nie zawiera znaczników, FATfetch automatycznie pokoloruje go
+#  głównym kolorem wybranej palety!
+# ==============================================================================
+       $C1/\$RST            $C2♥ MOJA WŁASNA POSTAĆ ASCII ♥$RST
+      $C1/  \$RST           $SKN( ◕ ‿ ◕ )$RST
+     $C1/ /\ \$RST          $C3[ 500KG ARCH GIGA-CHAD ]$RST
+    $C1/ /__\ \$RST         $BLK.---' === '---.$RST
+   $C1/ /    \ \$RST       $BLK/   $SKN(  BEBECH  )$BLK   \$RST
+  $C1/_/      \_\$RST      $BLK|   $SKN(  CUSTOM  )$BLK   |$RST
+  $C4( 500KG CUSTOM )$RST   $BLK\   $SKN'----------'$BLK   /$RST
+                       $SKN'---.___________.-'$RST
+                            $BLU/    ||   \$RST
+                           $BLU(____/  \____)$RST
